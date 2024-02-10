@@ -4,6 +4,7 @@ import FluentUI
 import QtQuick.Layouts
 import QtQuick.Controls
 import Qt.labs.platform
+import ImageProcessor 1.0
 
 FluWindow {
     width: 640
@@ -30,8 +31,10 @@ FluWindow {
         saveFolder: StandardPaths.writableLocation(StandardPaths.AppLocalDataLocation)+"/screenshot"
         onCaptrueCompleted:
             (captrue)=>{
-                print(StandardPaths.writableLocation(StandardPaths.AppLocalDataLocation)+"/screenshot" )
                 image.source = captrue
+                var size = imageProcessor.getImageSize(captrue)
+                Qt.size(size.width, size.height)
+                print(size)
             }
     }
 
