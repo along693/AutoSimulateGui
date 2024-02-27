@@ -16,7 +16,7 @@ find_package(OpenCV REQUIRED)
 
 
 set(PROJECT_SOURCES
-        main.cpp
+        src/cpp/src/main.cpp
         qml.qrc
 )
 
@@ -24,10 +24,10 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(AutoSimulateGui
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
-        ImageProcessor.h
-        ImageProcessor.cpp
-        FileManager.h
-        FileManager.cpp
+        src/cpp/header/FileManager.h
+        src/cpp/header/ImageProcessor.h
+        src/cpp/src/FileManager.cpp
+        src/cpp/src/ImageProcessor.cpp
     )
 # Define target properties for Andjroid with Qt 6 as:
 #    set_property(TARGET AutoSimulateGui APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
@@ -53,7 +53,6 @@ target_link_libraries(AutoSimulateGui
     Qt${QT_VERSION_MAJOR}::Quick
     ${OpenCV_LIBS}
 )
-message(STATUS "abcd OpenCV_LIB: ${OpenCV_LIBS}")
 
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
@@ -71,6 +70,7 @@ set_target_properties(AutoSimulateGui PROPERTIES
 )
 
 include(GNUInstallDirs)
+include_directories("src/cpp/header")
 install(TARGETS AutoSimulateGui
     BUNDLE DESTINATION .
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR})
