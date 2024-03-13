@@ -3,5 +3,6 @@
         <file alias="main.qml">src/qml/main.qml</file>
         <file alias="editor.qml">src/qml/editor.qml</file>
         <file>favicon.ico</file>
+        <file alias="event_edit.qml">src/qml/event_edit.qml</file>
     </qresource>
 </RCC>

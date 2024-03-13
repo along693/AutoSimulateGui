@@ -37,7 +37,7 @@ FluWindow {
         FluPaneItem{
             icon: FluentIcons.Event12
             title: "event"
-            url: "qrc:/editor.qml"
+            url: "qrc:/event_edit.qml"
             onTap:{
                 nav_view.push(url)
             }

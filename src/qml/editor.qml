@@ -37,7 +37,7 @@ Item {
             id: textEditor
             width: parent.width - lineNumberPanel.width - filenamePanel.width
             height: parent.height
-            implicitWidth: 600
+            implicitWidth: 580
             implicitHeight: parent.height
             contentWidth: textEditor.width
             contentHeight: textEditor.height
