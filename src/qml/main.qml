@@ -4,12 +4,11 @@ import FluentUI
 import QtQuick.Layouts
 import QtQuick.Controls
 import Qt.labs.platform
-import ImageProcessor 1.0
+
 
 FluWindow {
 
     id:window
-    title: "AutoSimulateGui"
     visible: true
     width: 960
     height: 600
@@ -23,13 +22,13 @@ FluWindow {
     }
 
     FluObject{
-        id: item_test
+        id: nav_left
         FluPaneItem{
             id: editor
             icon: FluentIcons.Edit
             count: 9
             title:"Edit"
-            url: "qrc:/test.qml"
+            url: "qrc:/editor.qml"
             onTap:{
                 nav_view.push(url)
             }
@@ -38,7 +37,7 @@ FluWindow {
         FluPaneItem{
             icon: FluentIcons.Event12
             title: "event"
-            url: "qrc:/test.qml"
+            url: "qrc:/editor.qml"
             onTap:{
                 nav_view.push(url)
             }
@@ -50,29 +49,25 @@ FluWindow {
         FluPaneItem{
             icon: FluentIcons.Help
             title:"help"
-            url: "qrc:/test.qml"
+            url: "qrc:/editor.qml"
             onTap:{
                 nav_view.push(url)
             }
         }
     }
-
     FluNavigationView{
+        logo: "qrc:/favicon.ico"
+        title:"AutoSimulate"
         id:nav_view
         width: parent.width
         height: parent.height
         displayMode: FluNavigationViewType.Compact
         z:999
         pageMode: FluNavigationViewType.NoStack
-        items:item_test
+        items:nav_left
         Component.onCompleted: {
             nav_view.setCurrentIndex(0)
-            nav_view.push("qrc:/test.qml")
+            nav_view.push("qrc:/editor.qml")
         }
     }
-    FluMenuBar{
-        id: menu
-        visible: true
-    }
-
 }

@@ -17,7 +17,7 @@ find_package(OpenCV REQUIRED)
 
 set(PROJECT_SOURCES
         src/cpp/src/main.cpp
-        qml.qrc
+
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
@@ -28,6 +28,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         src/cpp/header/ImageProcessor.h
         src/cpp/src/FileManager.cpp
         src/cpp/src/ImageProcessor.cpp
+        qml.qrc
     )
 # Define target properties for Andjroid with Qt 6 as:
 #    set_property(TARGET AutoSimulateGui APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR

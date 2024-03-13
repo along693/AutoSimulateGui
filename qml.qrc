@@ -1,6 +1,7 @@
 <RCC>
     <qresource prefix="/">
         <file alias="main.qml">src/qml/main.qml</file>
-        <file alias="test.qml">src/qml/editor.qml</file>
+        <file alias="editor.qml">src/qml/editor.qml</file>
+        <file>favicon.ico</file>
     </qresource>
 </RCC>
