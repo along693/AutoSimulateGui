@@ -1,78 +1,96 @@
-#include "FileManager.h"
-#include <QDir>
+#include "filemanager.h"
 #include <QFile>
-#include <QStandardPaths>
+#include <QTextStream>
+#include <QFileInfo>
 
-FileManager::FileManager(QObject *parent) : QObject(parent) {}
 
-bool FileManager::createFile(const QString &fileName)
+FileManager::FileManager(QObject *parent) : QObject(parent),
+    m_fileNamesModel(new QStringListModel(this))
 {
-    QString filePath = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/" + fileName;
+    // Set initial model data
+    m_fileNamesModel->setStringList(m_fileNames);
+}
 
+QString FileManager::fileName() const
+{
+    return m_fileName;
+}
+
+QStringList FileManager::fileContent() const
+{
+    return m_fileContent;
+}
+
+void FileManager::updateFileInfo(const QString &filePath)
+{
     QFile file(filePath);
-    if (file.exists()) {
-        qDebug() << "File already exists:" << filePath;
-        return false;
+    if (file.open(QIODevice::ReadOnly | QIODevice::Text))
+    {
+        // Update file name
+        m_fileName = QFileInfo(filePath).fileName();
+        emit fileNameChanged(m_fileName);
+
+        // Read file content and calculate line numbers
+        m_fileContent.clear();
+        QTextStream in(&file);
+        int lineNumber = 1;
+        while (!in.atEnd())
+        {
+            QString line = in.readLine();
+            m_fileContent.append(QString::number(lineNumber++) + ": " + line);
+        }
+        file.close();
+        emit fileContentChanged(m_fileContent);
     }
-
-    if (!file.open(QIODevice::WriteOnly)) {
-        qDebug() << "Failed to open file for writing:" << filePath;
-        return false;
-    }
-
-    file.close();
-
-    // Set file permissions
-    if (!file.setPermissions(QFile::ReadOwner | QFile::WriteOwner |
-                             QFile::ReadUser | QFile::WriteUser |
-                             QFile::ReadGroup | QFile::WriteGroup |
-                             QFile::ReadOther | QFile::WriteOther)) {
-        qDebug() << "Failed to set file permissions:" << filePath;
-        return false;
-    }
-
-    // Verify permissions
-    QFile::Permissions actualPermissions = file.permissions();
-    qDebug() << "Actual permissions for" << filePath << ":" << actualPermissions;
-
-    qDebug() << "File created:" << filePath;
-    return true;
-}
-bool FileManager::createDirectory(const QString &dirName)
-{
-    QString dirPath = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/" + dirName;
-
-    QDir dir(dirPath);
-    if (dir.exists()) {
-        qDebug() << "Directory already exists:" << dirPath;
-        return false;
-    }
-
-    if (!dir.mkpath(".")) {
-        qDebug() << "Failed to create directory:" << dirPath;
-        return false;
-    }
-
-    // Set directory permissions
-    QFile file(dirPath);
-    if (!file.setPermissions(QFile::ReadOwner | QFile::WriteOwner |
-                             QFile::ReadUser | QFile::WriteUser |
-                             QFile::ReadGroup | QFile::WriteGroup |
-                             QFile::ReadOther | QFile::WriteOther)) {
-        qDebug() << "Failed to set directory permissions:" << dirPath;
-        return false;
-    }
-
-    // Verify permissions
-    QFile::Permissions actualPermissions = file.permissions();
-    qDebug() << "Actual permissions for" << dirPath << ":" << actualPermissions;
-
-    qDebug() << "Directory created:" << dirPath;
-    return true;
 }
 
+QString FileManager::removePrefix(const QString &filePath){
+    QString tmpUrl = filePath;
+    return tmpUrl.replace("file:///","");
+}
 
-bool FileManager::setPermissions(const QString &path, QFile::Permissions permissions)
+void FileManager::getNamefromPath(QString Path){
+    if (Path.isEmpty()) {
+        m_fileName = "untitled";
+    } else {
+        QStringList parts = Path.split('/');
+        if (!parts.isEmpty()) {
+            m_fileName = parts.back();
+        } else {
+            m_fileName = "untitled";
+        }
+    }
+}
+
+void FileManager::loadTextFromFile(const QString &filePath)
 {
-    return QFile::setPermissions(path, permissions);
+    QString realPath = removePrefix(filePath);
+    QFile file(realPath);
+    getNamefromPath(realPath);
+    addFileName(m_fileName);
+
+    if (file.open(QIODevice::ReadOnly | QIODevice::Text))
+    {
+        QTextStream in(&file);
+        QString text = in.readAll();
+        file.close();
+        emit textLoaded(text);
+    }
+    else
+    {
+        qDebug() << "Failed to open file:" << filePath;
+    }
+}
+
+void FileManager::addFileName(const QString& fileName) {
+    if (!m_fileNames.contains(fileName)) {
+        m_fileNames.append(fileName);
+        m_fileNamesModel->setStringList(m_fileNames);
+        emit fileNameChanged(fileName);
+    }
+}
+
+QStringListModel* FileManager::fileNamesModel() const{
+    qDebug() << m_fileNamesModel->stringList();
+    return m_fileNamesModel;
 }

@@ -1,17 +1,66 @@
 import QtQuick 2.15
 import FluentUI
 import QtQuick.Controls 2.15
+import QtQuick.Dialogs
+import Qt.labs.platform
+
 
 Item {
     id: root
     property alias text: textArea.text
     width: 800
+
+
+    Component {
+        id: filesDelegate
+        Item {
+            width: filenamePanel.width
+            height: 25
+            Button {
+                id: button
+                checked: (index === listView.currentIndex) ? true : false
+                checkable: true
+                anchors.fill: parent
+                text: filename + (fileNeedsSaving ? "*" : "")
+                ButtonGroup.group: openedFileButtonGroup
+                onClicked: mainController.fileNavigationController.fileOpenedClicked(fileId)
+                background: Rectangle {
+                   color: {
+                       if (button.checked) {
+                           return FluColors.Black
+                       }
+                       if (button.hovered) {
+                           return FluColors.Blue
+                       }
+
+                       return FluColors.Green
+                   }
+                   border.width: 0
+                   radius: 0
+                }
+                contentItem: Text {
+                    text: button.text
+                    verticalAlignment: Text.AlignVCenter
+                    color: Style.fileNavigationTextColor
+                }
+            }
+        }
+    }
+
     Rectangle {
         implicitHeight: parent.height
         implicitWidth: 120
         id: filenamePanel
         color: "#b6ccd8"
+        ListView{
+            id: fileNames
+            anchors.fill: parent
+            model: fileManager.fileNamesModel
+            focus: true
+            delegate: FluItemDelegate
+        }
     }
+
 
 
     Rectangle {
@@ -24,7 +73,37 @@ Item {
         height: root.height
         id: lineNumberPanel
         color: "#cccbc8"
+        ListView {
+            anchors.fill: parent
+            model: fileLineContent
+            delegate: Text {
+                text: modelData
+            }
+        }
     }
+    Connections {
+        target: fileManager
+        function onTextLoaded(text) {
+            textArea.text = text
+        }
+        function onfileNameChanged(filename){
+            fileNames.delegate.text = modelData
+        }
+    }
+
+
+    FileDialog {
+        id: fileDialog
+        title: "Select a file"
+        nameFilters: ["Text files (*.txt)", "All files (*)"]
+        fileMode: FileDialog.OpenFile
+        folder: StandardPaths.writableLocation(StandardPaths.HomeLocation)
+        onAccepted: {
+            var filePath = fileDialog.file.toString();
+            fileManager.loadTextFromFile(filePath);
+        }
+    }
+
     FluSplitLayout {
         id: splitView
         anchors {
@@ -75,6 +154,9 @@ Item {
                             iconSize: 25
                             normalColor: "#71c4ef"
                             hoverColor: "#d4eaf7"
+                            onClicked: {
+                                fileDialog.open();
+                            }
                         }
                         FluIconButton{
                             iconSource: FluentIcons.GlobalNavButton

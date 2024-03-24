@@ -29,6 +29,8 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         src/cpp/src/FileManager.cpp
         src/cpp/src/ImageProcessor.cpp
         qml.qrc
+        src/cpp/header/FileController.h
+        src/cpp/src/FileController.cpp
     )
 # Define target properties for Andjroid with Qt 6 as:
 #    set_property(TARGET AutoSimulateGui APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR

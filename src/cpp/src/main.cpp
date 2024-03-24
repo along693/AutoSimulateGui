@@ -3,6 +3,7 @@
 #include <QQmlContext>
 #include "ImageProcessor.h"
 #include "FileManager.h"
+#include "FileController.h"
 
 int main(int argc, char *argv[])
 {
@@ -12,15 +13,11 @@ int main(int argc, char *argv[])
     QGuiApplication app(argc, argv);
     ImageProcessor imageProcessor;
     QQmlApplicationEngine engine;
+    FileController controller(engine);
+
     qmlRegisterType<ImageProcessor>("ImageProcessor", 1, 0, "ImageProcessor");
-
-    // Test create folder
-    // FileManager fileManager;
-    // QString folderName = "screenshot";
-    // fileManager.createDirectory(folderName);
-
-
     engine.rootContext()->setContextProperty("imageProcessor", &imageProcessor);
+
     const QUrl url(QStringLiteral("qrc:/main.qml"));
     QObject::connect(
         &engine,
