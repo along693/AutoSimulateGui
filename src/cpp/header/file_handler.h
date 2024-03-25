@@ -3,6 +3,7 @@
 #include <QObject>
 #include <QString>
 #include <QUrl>
+#include <QPointer>
 
 class FileHandler : public QObject
 {
