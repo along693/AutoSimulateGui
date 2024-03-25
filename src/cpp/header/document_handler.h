@@ -17,7 +17,7 @@ Q_OBJECT
 
     Q_PROPERTY(QString filename READ filename)
     Q_PROPERTY(QString fileType READ fileType)
-    Q_PROPERTY(QUrl fileUrl READ fileUrl NO TIFY fileUrlChanged)
+    Q_PROPERTY(QUrl fileUrl READ fileUrl NOTIFY fileUrlChanged)
     Q_PROPERTY(QString textContent READ textContent WRITE setTextContent)
     Q_PROPERTY(int id READ id)
     Q_PROPERTY(bool needsUpdating READ needsUpdating WRITE setNeedsUpdating NOTIFY needsUpdatingChanged)

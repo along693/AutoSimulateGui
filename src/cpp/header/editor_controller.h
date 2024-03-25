@@ -2,10 +2,9 @@
 
 #include <QObject>
 #include <QString>
-#include <editor_model.h>
+#include "abstract_editor_model.h"
 
-class  EditorController;
-
+class AbstractEditorModel;
 
 class EditorController : public QObject
 {
@@ -15,7 +14,7 @@ Q_OBJECT
 public:
     explicit EditorController(QObject *parent = nullptr);
 
-    void setModel(EditorModel &model);
+    void setModel(AbstractEditorModel &model);
 
     QString text() const;
     void setText(const QString &text);
@@ -27,7 +26,7 @@ Q_SIGNALS:
     void textChanged();
 
 private:
-    EditorModel *model_{nullptr};
+    AbstractEditorModel *model_{nullptr};
     QMetaObject::Connection text_changed_connection_;
 };
 

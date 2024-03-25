@@ -1,51 +1,35 @@
 #include "editor_controller.h"
+#include "abstract_editor_model.h"
 
 EditorController::EditorController(QObject *parent)
-        : QObject(parent), model_(nullptr)
+        : QObject{parent}
 {}
 
-void EditorController::setModel(EditorModel &model)
+void EditorController::setModel(AbstractEditorModel &model)
 {
     disconnect(text_changed_connection_);
     model_ = &model;
-    text_changed_connection_ = connect(model_,
-                                       &EditorModel::textChanged,
-                                       this,
-                                       &EditorController::textChanged);
+    text_changed_connection_ = connect(model_, &AbstractEditorModel::textChanged, this, &EditorController::textChanged);
 }
 
 QString EditorController::text() const
 {
-    if (!model_) {
-        return "";
-    }
-
-    return model_->text();
+    return model_ ? model_->text() : QString();
 }
 
 void EditorController::setText(const QString &text)
 {
-    if (!model_) {
-        return;
-    }
-
-    model_->setText(text);
+    if (model_)
+        model_->setText(text);
 }
 
 int EditorController::id() const
 {
-    if (!model_) {
-        return 0;
-    }
-
-    return model_->id();
+    return model_ ? model_->id() : 0;
 }
 
 void EditorController::setId(int id)
 {
-    if (!model_) {
-        return;
-    }
-
-    model_->setId(id);
+    if (model_)
+        model_->setId(id);
 }

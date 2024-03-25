@@ -1,9 +1,18 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
-#include "ImageProcessor.h"
-#include "FileManager.h"
-#include "FileController.h"
+#include <QDebug>
+
+#include "editor_controller.h"
+#include "navigation_controller.h"
+#include "main_controller.h"
+#include "menu_controller.h"
+
+#include "document_handler.h"
+#include "document_model.h"
+#include "navigation_model.h"
+#include "menu_model.h"
+#include "qml_editor_model.h"
 
 int main(int argc, char *argv[])
 {
@@ -11,12 +20,33 @@ int main(int argc, char *argv[])
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 #endif
     QGuiApplication app(argc, argv);
-    ImageProcessor imageProcessor;
-    QQmlApplicationEngine engine;
-    FileController controller(engine);
+    qmlRegisterType<MainController>("Editor", 1, 0, "MainController");
+    qmlRegisterType<MenuController>("Editor", 1, 0, "MenuController");
+    qmlRegisterType<FileNavigationController>("Editor", 1, 0, "FileNavigationController");
+    qmlRegisterType<DocumentHandler>("Editor", 1, 0, "DocumentHandler");
 
-    qmlRegisterType<ImageProcessor>("ImageProcessor", 1, 0, "ImageProcessor");
-    engine.rootContext()->setContextProperty("imageProcessor", &imageProcessor);
+
+    MainController main_controller;
+    DocumentsModel documents_model;
+    main_controller.setDocumentsModel(documents_model);
+
+    QmlEditorModel editor_model;
+    main_controller.editorController()->setModel(editor_model);
+
+    MenuModel menu_model;
+    main_controller.menuController()->setModel(menu_model);
+
+    FileNavigationModel file_navigation_model;
+    main_controller.fileNavigationController()->setModel(file_navigation_model);
+
+    main_controller.menuController()->newFileClicked(); //Create a new file to start with!
+
+    QQmlApplicationEngine engine;
+    engine.rootContext()->setContextProperty("mainController", &main_controller);
+    engine.rootContext()->setContextProperty("documentsModel", &documents_model);
+    engine.rootContext()->setContextProperty("editorModel", &editor_model);
+    engine.rootContext()->setContextProperty("menuModel", &menu_model);
+    engine.rootContext()->setContextProperty("fileNavigationModel", &file_navigation_model);
 
     const QUrl url(QStringLiteral("qrc:/main.qml"));
     QObject::connect(

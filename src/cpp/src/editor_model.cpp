@@ -4,7 +4,7 @@
 #include <QTextDocument>
 
 EditorModel::EditorModel(QObject *parent)
-        : QObject(parent), text_document_(nullptr), id_(0)
+        : AbstractEditorModel{parent}
 {}
 
 QString EditorModel::text() const
@@ -23,7 +23,7 @@ void EditorModel::setText(const QString &text)
     }
 
     { // Only block signals in scope
-        QSignalBlocker block_signals(this);
+        QSignalBlocker block_signals{this};
         text_document_->setPlainText(text);
     }
 
@@ -40,21 +40,5 @@ void EditorModel::setTextDocument(QTextDocument *text_document)
     connect(text_document_,
             &QTextDocument::contentsChanged,
             this,
-            &EditorModel::textChanged);
-}
-
-int EditorModel::id() const
-{
-    return id_;
-}
-
-void EditorModel::setId(const int id)
-{
-    if (id_ == id) {
-        return;
-    }
-
-    id_ = id;
-
-    emit idChanged();
+            &AbstractEditorModel::textChanged);
 }

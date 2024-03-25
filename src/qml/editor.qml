@@ -3,6 +3,7 @@ import FluentUI
 import QtQuick.Controls 2.15
 import QtQuick.Dialogs
 import Qt.labs.platform
+import Editor 1.0
 
 
 Item {
@@ -18,7 +19,7 @@ Item {
             height: 25
             Button {
                 id: button
-                checked: (index === listView.currentIndex) ? true : false
+                checked: index === listView.currentIndex
                 checkable: true
                 anchors.fill: parent
                 text: filename + (fileNeedsSaving ? "*" : "")
@@ -55,9 +56,9 @@ Item {
         ListView{
             id: fileNames
             anchors.fill: parent
-            model: fileManager.fileNamesModel
-            focus: true
+            model: documentsModel
             delegate: FluItemDelegate
+            focus: true
         }
     }
 
@@ -128,6 +129,9 @@ Item {
                 background: null
                 selectByMouse: true
                 wrapMode: TextEdit.WordWrap
+                Component.onCompleted: {
+                    editorModel.document = textArea.textDocument
+                }
             }
             ScrollBar.vertical: FluScrollBar {}
             ScrollBar.horizontal: FluScrollBar {}
