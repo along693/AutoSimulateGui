@@ -36,8 +36,8 @@ Item {
                        if (button.hovered) {
                            return FluColors.Blue
                        }
+                       return FluColors.Grey110
 
-                       return FluColors.Green
                    }
                    border.width: 0
                    radius: 0
@@ -45,7 +45,7 @@ Item {
                 contentItem: Text {
                     text: button.text
                     verticalAlignment: Text.AlignVCenter
-                    color: Style.fileNavigationTextColor
+                    color: "#1d195e"
                 }
             }
         }
@@ -57,11 +57,10 @@ Item {
         id: filenamePanel
         color: "#b6ccd8"
         ListView{
-            id: fileNames
+            id: listView
             anchors.fill: parent
             model: documentsModel
             delegate: openedFilesDelegate
-            focus: true
         }
     }
 
@@ -85,28 +84,48 @@ Item {
             }
         }
     }
-    Connections {
-        target: fileManager
-        function onTextLoaded(text) {
-            textArea.text = text
-        }
-        function onfileNameChanged(filename){
-            fileNames.delegate.text = modelData
-        }
-    }
-
 
     FileDialog {
-        id: fileDialog
-        title: "Select a file"
-        nameFilters: ["Text files (*.txt)", "All files (*)"]
+        id: openDialog
         fileMode: FileDialog.OpenFile
-        folder: StandardPaths.writableLocation(StandardPaths.HomeLocation)
-        onAccepted: {
-            var filePath = fileDialog.file.toString();
-            fileManager.loadTextFromFile(filePath);
-        }
+        selectedNameFilter.index: 1
+        nameFilters: ["*"]
+        folder: StandardPaths.writableLocation(StandardPaths.DocumentsLocation)
+        onAccepted: mainController.menuController.openFileClicked(file)
     }
+
+    FileDialog {
+        id: saveDialog
+        fileMode: FileDialog.SaveFile
+        nameFilters: openDialog.nameFilters
+        folder: StandardPaths.writableLocation(StandardPaths.DocumentsLocation)
+        onAccepted: mainController.menuController.saveAsFileClicked(file);
+    }
+
+    Shortcut {
+        id: openShortcut
+        sequence: StandardKey.Open
+        onActivated: openDialog.open()
+    }
+
+    Shortcut {
+        id: saveAsShortcut
+        sequence: StandardKey.SaveAs
+        onActivated: saveDialog.open()
+    }
+
+    Shortcut {
+        id: saveShortcut
+        sequence: StandardKey.Save
+        onActivated: menuModel.isNewFile ? saveDialog.open() : mainController.menuController.saveFileClicked();
+    }
+
+    Shortcut {
+        id: newShortcut
+        sequence: StandardKey.New
+        onActivated: mainController.menuController.newFileClicked();
+    }
+
 
     FluSplitLayout {
         id: splitView
@@ -161,19 +180,19 @@ Item {
                             iconSize: 25
                             normalColor: "#71c4ef"
                             hoverColor: "#d4eaf7"
-                            onClicked: {
-                                fileDialog.open();
-                            }
+                            onClicked: mainController.menuController.newFileClicked();
                         }
                         FluIconButton{
                             iconSource: FluentIcons.GlobalNavButton
                             iconSize: 25
                             normalColor: "#71c4ef"
+                            onClicked: openDialog.open()
                         }
                         FluIconButton{
                             iconSource: FluentIcons.GlobalNavButton
                             iconSize: 25
                             normalColor: "#71c4ef"
+                            onClicked: saveDialog.open()
                         }
                         FluIconButton{
                             iconSource: FluentIcons.GlobalNavButton
