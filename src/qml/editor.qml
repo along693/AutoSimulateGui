@@ -12,8 +12,11 @@ Item {
     width: 800
 
 
+    ButtonGroup {
+        id: openedFileButtonGroup
+    }
     Component {
-        id: filesDelegate
+        id: openedFilesDelegate
         Item {
             width: filenamePanel.width
             height: 25
@@ -28,7 +31,7 @@ Item {
                 background: Rectangle {
                    color: {
                        if (button.checked) {
-                           return FluColors.Black
+                           return FluColors.White
                        }
                        if (button.hovered) {
                            return FluColors.Blue
@@ -57,7 +60,7 @@ Item {
             id: fileNames
             anchors.fill: parent
             model: documentsModel
-            delegate: FluItemDelegate
+            delegate: openedFilesDelegate
             focus: true
         }
     }
