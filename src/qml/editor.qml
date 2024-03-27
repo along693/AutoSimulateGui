@@ -126,7 +126,6 @@ Item {
         onActivated: mainController.menuController.newFileClicked();
     }
 
-
     FluSplitLayout {
         id: splitView
         anchors {
@@ -200,8 +199,21 @@ Item {
                             normalColor: "#71c4ef"
                              onClicked: WindowManager.hideApplication()
                         }
+                        FluIconButton{
+                            iconSource: FluentIcons.GlobalNavButton
+                            iconSize: 25
+                            normalColor: "#71c4ef"
+                             onClicked: {screenShotCom.source = "screenshot.qml";}
+                        }
                     }
-
+                    Loader{
+                        id: screenShotCom
+                        onLoaded: {
+                            item.closing.connect(function (){
+                                screenShotCom.source = "";
+                            });
+                        }
+                    }
                 }
 
                 Rectangle {
