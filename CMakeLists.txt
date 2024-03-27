@@ -23,7 +23,6 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
             ${PROJECT_HEADERS}
             ${PROJECT_SOURCES}
             qml.qrc
-            src/cpp/header/window_manager.h
         )
 else()
     if(ANDROID)
