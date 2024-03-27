@@ -15,6 +15,7 @@ FluWindow {
     minimumWidth: 520
     minimumHeight: 200
     fitsAppBarWindows: true
+
     FluAcrylic{
         width: window.width
         height: window.height

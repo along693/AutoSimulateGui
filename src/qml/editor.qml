@@ -198,6 +198,7 @@ Item {
                             iconSource: FluentIcons.GlobalNavButton
                             iconSize: 25
                             normalColor: "#71c4ef"
+                             onClicked: WindowManager.hideApplication()
                         }
                     }
 

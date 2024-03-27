@@ -13,6 +13,7 @@
 #include "navigation_model.h"
 #include "menu_model.h"
 #include "qml_editor_model.h"
+#include "window_manager.h"
 
 int main(int argc, char *argv[])
 {
@@ -41,12 +42,15 @@ int main(int argc, char *argv[])
 
     main_controller.menuController()->newFileClicked(); //Create a new file to start with!
 
+    WindowManager windowManager;
+
     QQmlApplicationEngine engine;
     engine.rootContext()->setContextProperty("mainController", &main_controller);
     engine.rootContext()->setContextProperty("documentsModel", &documents_model);
     engine.rootContext()->setContextProperty("editorModel", &editor_model);
     engine.rootContext()->setContextProperty("menuModel", &menu_model);
     engine.rootContext()->setContextProperty("fileNavigationModel", &file_navigation_model);
+    engine.rootContext()->setContextProperty("WindowManager", &windowManager);
 
     const QUrl url(QStringLiteral("qrc:/main.qml"));
     QObject::connect(
@@ -59,6 +63,9 @@ int main(int argc, char *argv[])
         },
         Qt::QueuedConnection);
     engine.load(url);
+
+
+
 
     return app.exec();
 }
