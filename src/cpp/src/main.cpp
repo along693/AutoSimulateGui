@@ -15,6 +15,7 @@
 #include "qml_editor_model.h"
 #include "window_manager.h"
 #include "screenshot.h"
+#include "autogui_test.h"
 
 int main(int argc, char *argv[])
 {
@@ -44,6 +45,8 @@ int main(int argc, char *argv[])
     main_controller.menuController()->newFileClicked(); //Create a new file to start with!
 
     WindowManager windowManager;
+    Screenshot screenshot;
+
 
     QQmlApplicationEngine engine;
     engine.rootContext()->setContextProperty("mainController", &main_controller);
@@ -52,6 +55,8 @@ int main(int argc, char *argv[])
     engine.rootContext()->setContextProperty("menuModel", &menu_model);
     engine.rootContext()->setContextProperty("fileNavigationModel", &file_navigation_model);
     engine.rootContext()->setContextProperty("WindowManager", &windowManager);
+    engine.rootContext()->setContextProperty("ScreenShot", &screenshot);
+
 
     const QUrl url(QStringLiteral("qrc:/main.qml"));
     QObject::connect(
@@ -64,17 +69,6 @@ int main(int argc, char *argv[])
         },
         Qt::QueuedConnection);
     engine.load(url);
-
-    Screenshot screenshot;
-
-    // 指定要截取的区域
-    QRect captureRect(100, 100, 300, 200); // 从 (100, 100) 开始截取宽度为 300，高度为 200 的区域
-
-    // 截取指定区域并保存到指定文件
-    QString savePath = "D:/captured_area.png"; // 保存路径
-    QPixmap capturedImage = screenshot.captureArea(captureRect);
-    capturedImage.save(savePath);
-    qDebug() << "Captured area saved to" << savePath;
 
     return app.exec();
 }

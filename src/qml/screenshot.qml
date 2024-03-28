@@ -321,7 +321,7 @@ Window {
 
 
     function captureScreenshot(x, y, width, height) {
-        g_screenShot.saveImageToClipboard(x, y, width, height);
+        ScreenShot.captureArea(x, y, width, height);
     }
 }
 

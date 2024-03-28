@@ -23,8 +23,6 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
             ${PROJECT_HEADERS}
             ${PROJECT_SOURCES}
             qml.qrc
-
-
         )
 else()
     if(ANDROID)
