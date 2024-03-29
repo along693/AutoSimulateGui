@@ -173,39 +173,50 @@ Item {
                     height: rightPanel.height / 2
                     color:"#f5f4f1"
                     radius: 30
-                    Row{
-                        FluIconButton{
-                            iconSource: FluentIcons.GlobalNavButton
-                            iconSize: 25
-                            normalColor: "#71c4ef"
-                            hoverColor: "#d4eaf7"
-                            onClicked: mainController.menuController.newFileClicked();
+                    Column{
+                        Row{
+                            FluIconButton{
+                                iconSource: FluentIcons.GlobalNavButton
+                                iconSize: 25
+                                normalColor: "#71c4ef"
+                                hoverColor: "#d4eaf7"
+                                onClicked: mainController.menuController.newFileClicked();
+                            }
+                            FluIconButton{
+                                iconSource: FluentIcons.GlobalNavButton
+                                iconSize: 25
+                                normalColor: "#71c4ef"
+                                onClicked: openDialog.open()
+                            }
+                            FluIconButton{
+                                iconSource: FluentIcons.GlobalNavButton
+                                iconSize: 25
+                                normalColor: "#71c4ef"
+                                onClicked: saveDialog.open()
+                            }
+                            FluIconButton{
+                                iconSource: FluentIcons.GlobalNavButton
+                                iconSize: 25
+                                normalColor: "#71c4ef"
+                                 onClicked: WindowManager.hideApplication()
+                            }
                         }
-                        FluIconButton{
-                            iconSource: FluentIcons.GlobalNavButton
-                            iconSize: 25
-                            normalColor: "#71c4ef"
-                            onClicked: openDialog.open()
+                        Row{
+                            FluIconButton{
+                                iconSource: FluentIcons.GlobalNavButton
+                                iconSize: 25
+                                normalColor: "#71c4ef"
+                                 onClicked: {screenShotCom.source = "screenshot.qml";}
+                            }
+                            FluIconButton{
+                                iconSource: FluentIcons.GlobalNavButton
+                                iconSize: 25
+                                normalColor: "#71c4ef"
+                                onClicked: print(editorModel.text)
+                            }
+
                         }
-                        FluIconButton{
-                            iconSource: FluentIcons.GlobalNavButton
-                            iconSize: 25
-                            normalColor: "#71c4ef"
-                            onClicked: saveDialog.open()
-                        }
-                        FluIconButton{
-                            iconSource: FluentIcons.GlobalNavButton
-                            iconSize: 25
-                            normalColor: "#71c4ef"
-                             onClicked: WindowManager.hideApplication()
-                        }
-                        FluIconButton{
-                            iconSource: FluentIcons.GlobalNavButton
-                            iconSize: 25
-                            normalColor: "#71c4ef"
-                             onClicked: {screenShotCom.source = "screenshot.qml";}
-                        }
-                    }
+
                     Loader{
                         id: screenShotCom
                         onLoaded: {
@@ -214,6 +225,10 @@ Item {
                             });
                         }
                     }
+
+                    }
+
+
                 }
 
                 Rectangle {
