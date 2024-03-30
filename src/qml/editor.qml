@@ -56,6 +56,7 @@ Item {
         implicitWidth: 120
         id: filenamePanel
         color: "#b6ccd8"
+        clip: true
         ListView{
             id: listView
             anchors.fill: parent
@@ -212,7 +213,7 @@ Item {
                                 iconSource: FluentIcons.GlobalNavButton
                                 iconSize: 25
                                 normalColor: "#71c4ef"
-                                onClicked: print(editorModel.text)
+                                onClicked: Executor.execute(Parser.parse(editorModel.text))
                             }
 
                         }

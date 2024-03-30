@@ -16,6 +16,8 @@
 #include "window_manager.h"
 #include "screenshot.h"
 #include "autogui_test.h"
+#include "parser.h"
+#include "executor.h"
 
 int main(int argc, char *argv[])
 {
@@ -46,6 +48,8 @@ int main(int argc, char *argv[])
 
     WindowManager windowManager;
     Screenshot screenshot;
+    Parser parser;
+    Executor executor;
 
 
     QQmlApplicationEngine engine;
@@ -56,6 +60,8 @@ int main(int argc, char *argv[])
     engine.rootContext()->setContextProperty("fileNavigationModel", &file_navigation_model);
     engine.rootContext()->setContextProperty("WindowManager", &windowManager);
     engine.rootContext()->setContextProperty("ScreenShot", &screenshot);
+    engine.rootContext()->setContextProperty("Parser", &parser);
+    engine.rootContext()->setContextProperty("Executor", &executor);
 
 
     const QUrl url(QStringLiteral("qrc:/main.qml"));
