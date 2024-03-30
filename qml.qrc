@@ -6,5 +6,6 @@
         <file alias="event_edit.qml">src/qml/event_edit.qml</file>
         <file alias="screenshot.qml">src/qml/screenshot.qml</file>
         <file alias="CusDragRect.qml">src/qml/CusDragRect.qml</file>
+        <file alias="add_event.qml">src/qml/add_event.qml</file>
     </qresource>
 </RCC>

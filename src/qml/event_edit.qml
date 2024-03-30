@@ -3,6 +3,7 @@ import FluentUI
 import QtQuick.Controls 2.15
 
 Item{
+    property var qmlWindow: null
     FluScrollablePage{
         width: parent.width*0.815
         height: parent.height
@@ -58,27 +59,42 @@ Item{
             color:"#f5f4f1"
             radius: 30
             Row{
-            FluIconButton{
-            iconSource: FluentIcons.GlobalNavButton
-            iconSize: 25
-            normalColor: "#71c4ef"
-            hoverColor: "#d4eaf7"
-            }
-            FluIconButton{
-            iconSource: FluentIcons.GlobalNavButton
-            iconSize: 25
-            normalColor: "#71c4ef"
-            }
-            FluIconButton{
-            iconSource: FluentIcons.GlobalNavButton
-            iconSize: 25
-            normalColor: "#71c4ef"
-            }
-            FluIconButton{
-            iconSource: FluentIcons.GlobalNavButton
-            iconSize: 25
-            normalColor: "#71c4ef"
-            }
+                FluIconButton{
+                    iconSource: FluentIcons.GlobalNavButton
+                    iconSize: 25
+                    normalColor: "#71c4ef"
+                    hoverColor: "#d4eaf7"
+                    onClicked: {
+                        print(1)
+                        // 创建并显示 QML 窗口
+                        if (!qmlWindow) {
+                            // 创建并显示 QML 窗口
+                            var component = Qt.createComponent("add_event.qml");
+                            if (component.status === Component.Ready) {
+                                qmlWindow = component.createObject(parent);
+                                qmlWindow.show();
+                            }
+                        } else {
+                            // 如果窗口已经存在，则激活并显示
+                            qmlWindow.show();
+                        }
+                    }
+                }
+                FluIconButton{
+                    iconSource: FluentIcons.GlobalNavButton
+                    iconSize: 25
+                    normalColor: "#71c4ef"
+                }
+                FluIconButton{
+                    iconSource: FluentIcons.GlobalNavButton
+                    iconSize: 25
+                    normalColor: "#71c4ef"
+                }
+                FluIconButton{
+                    iconSource: FluentIcons.GlobalNavButton
+                    iconSize: 25
+                    normalColor: "#71c4ef"
+                }
             }
             }
             Rectangle {
