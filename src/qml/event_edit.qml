@@ -30,7 +30,6 @@ Item{
                 var parameters = word.slice(1);
                 list_model.append({lable: keyword, text: parameters.join(" ")});
             }
-
         }
     }
     function clearInput(){
