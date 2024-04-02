@@ -1,10 +1,46 @@
 import QtQuick 2.15
 import FluentUI
 import QtQuick.Controls 2.15
+import QtQuick.Dialogs
 import QtQuick.Layouts
+import Qt.labs.platform
+import Editor 1.0
 
 Item{
     property var qmlWindow: null
+    TextArea{
+        id: hiddenText
+        visible: false
+        Component.onCompleted: {
+            editorModel.document = hiddenText.textDocument
+        }
+        onTextChanged: {
+            var text = hiddenText.text.split("\n");
+            var result = [];
+            for(var i = 0; i < text.length; i ++) {
+                if(text[i].trim() !== "") {
+                    result.push(text[i].trim());
+                }
+            }
+            print(result)
+            list_model.clear();
+            for (i = 0; i < result.length; i ++ ) {
+                var word = result[i].split(" ");
+                var keyword = word[0];
+                var parameters = word.slice(1);
+                list_model.append({lable: keyword, text: parameters.join(" ")});
+            }
+
+        }
+    }
+    function clearInput(){
+        parameter1.clear();
+        parameter2.clear();
+        parameter3.clear();
+        parameter4.clear();
+    }
+
+
     FluScrollablePage{
         width: parent.width*0.7
         height: parent.height
@@ -20,8 +56,53 @@ Item{
             height: parent.height
             model: list_model
             mode: FluTimelineType.Left
+            Component.onCompleted: {
+                editorModel.text = event_text
+            }
         }
     }
+
+    FileDialog {
+        id: openDialog
+        fileMode: FileDialog.OpenFile
+        selectedNameFilter.index: 1
+        nameFilters: ["*"]
+        folder: StandardPaths.writableLocation(StandardPaths.DocumentsLocation)
+        onAccepted: mainController.menuController.openFileClicked(file)
+    }
+
+    FileDialog {
+        id: saveDialog
+        fileMode: FileDialog.SaveFile
+        nameFilters: openDialog.nameFilters
+        folder: StandardPaths.writableLocation(StandardPaths.DocumentsLocation)
+        onAccepted: mainController.menuController.saveAsFileClicked(file);
+    }
+
+    Shortcut {
+        id: openShortcut
+        sequence: StandardKey.Open
+        onActivated: openDialog.open()
+    }
+
+    Shortcut {
+        id: saveAsShortcut
+        sequence: StandardKey.SaveAs
+        onActivated: saveDialog.open()
+    }
+
+    Shortcut {
+        id: saveShortcut
+        sequence: StandardKey.Save
+        onActivated: menuModel.isNewFile ? saveDialog.open() : mainController.menuController.saveFileClicked();
+    }
+
+    Shortcut {
+        id: newShortcut
+        sequence: StandardKey.New
+        onActivated: mainController.menuController.newFileClicked();
+    }
+
     Rectangle {
         id: rightPanel
         anchors{
@@ -49,27 +130,33 @@ Item{
                     iconSize: 25
                     normalColor: "#71c4ef"
                     hoverColor: "#d4eaf7"
+                    onClicked: mainController.menuController.newFileClicked();
                 }
                 FluIconButton{
                     iconSource: FluentIcons.GlobalNavButton
                     iconSize: 25
                     normalColor: "#71c4ef"
+                    hoverColor: "#d4eaf7"
+                    onClicked: openDialog.open()
                 }
                 FluIconButton{
                     iconSource: FluentIcons.GlobalNavButton
                     iconSize: 25
                     normalColor: "#71c4ef"
+                    hoverColor: "#d4eaf7"
+                    onClicked: saveDialog.open()
                 }
                 FluIconButton{
                     iconSource: FluentIcons.GlobalNavButton
                     iconSize: 25
                     normalColor: "#71c4ef"
+                    hoverColor: "#d4eaf7"
+                    onClicked: Executor.execute(Parser.parse(editorModel.text))
                 }
             }
             ListModel{
                 id: parameterInput
             }
-
             FluComboBox {
                 id: keywordComboBox
                 textRole: "text"
@@ -81,14 +168,11 @@ Item{
                     ListElement { text: "capture"; parameterCount: 0 }
                     ListElement { text: "delay"; parameterCount: 1 }
                     ListElement { text: "write"; parameterCount: 1 }
-                    ListElement { text: "loop"; parameterCount: 0 }
+                    ListElement { text: "loop"; parameterCount: 1 }
                     ListElement { text: "endloop"; parameterCount: 0 }
                 }
                 onCurrentIndexChanged: {
-                    parameter1.clear();
-                    parameter2.clear();
-                    parameter3.clear();
-                    parameter4.clear();
+                    clearInput()
                 }
             }
             FluViewModel {
@@ -138,6 +222,7 @@ Item{
                 viewModel.text4 = text
                 }
             }
+
             FluFilledButton{
                 text: qsTr("Append")
                 onClicked: {
@@ -145,11 +230,14 @@ Item{
                         console.log("Please select a keyword.")
                         return
                     }
-                    var parameters = [parameter1.text, parameter2.text, parameter3.text, parameter4.text]
+                    var keyword = keywordComboBox.model.get(keywordComboBox.currentIndex).text;
+                    var parameters = [parameter1.text, parameter2.text, parameter3.text, parameter4.text];
                     var parameterString = parameters.join(" ");
-                    list_model.append({lable: keywordComboBox.model.get(keywordComboBox.currentIndex).text, text:parameterString});
-                    console.log("keyword:", keywordComboBox.model.get(keywordComboBox.currentIndex).text)
-                    console.log("Parameters:", parameterString)
+                    // list_model.append({lable: keywordComboBox.model.get(keywordComboBox.currentIndex).text, text:parameterString});
+                    console.log("keyword:", keywordComboBox.model.get(keywordComboBox.currentIndex).text);
+                    console.log("Parameters:", parameterString);
+                    hiddenText.text += keyword + " " + parameterString + '\n';
+                    clearInput();
                 }
             }
             }
