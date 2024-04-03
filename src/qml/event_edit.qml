@@ -55,9 +55,6 @@ Item{
             height: parent.height
             model: list_model
             mode: FluTimelineType.Left
-            Component.onCompleted: {
-                editorModel.text = event_text
-            }
         }
     }
 

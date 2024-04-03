@@ -18,6 +18,7 @@
 #include "autogui_test.h"
 #include "parser.h"
 #include "executor.h"
+#include "log_controller.h"
 
 int main(int argc, char *argv[])
 {
@@ -50,6 +51,7 @@ int main(int argc, char *argv[])
     Screenshot screenshot;
     Parser parser;
     Executor executor;
+    LogController *logController = LogController::instance();
 
 
     QQmlApplicationEngine engine;
@@ -62,6 +64,7 @@ int main(int argc, char *argv[])
     engine.rootContext()->setContextProperty("ScreenShot", &screenshot);
     engine.rootContext()->setContextProperty("Parser", &parser);
     engine.rootContext()->setContextProperty("Executor", &executor);
+    engine.rootContext()->setContextProperty("logController", logController);
 
 
     const QUrl url(QStringLiteral("qrc:/App.qml"));

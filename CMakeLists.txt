@@ -23,11 +23,8 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
             ${PROJECT_HEADERS}
             ${PROJECT_SOURCES}
             qml.qrc
-            src/cpp/header/token.h
-            src/cpp/header/parser.h
-            src/cpp/src/parser.cpp
-            src/cpp/header/executor.h
-            src/cpp/src/executor.cpp
+            src/cpp/header/log_controller.h
+            src/cpp/src/log_controller.cpp
         )
 else()
     if(ANDROID)

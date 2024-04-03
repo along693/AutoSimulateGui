@@ -5,16 +5,15 @@ import QtQuick.Dialogs
 import Qt.labs.platform
 import Editor 1.0
 
-
 Item {
     id: root
     property alias text: textArea.text
     width: 800
 
-
     ButtonGroup {
         id: openedFileButtonGroup
     }
+
     Component {
         id: openedFilesDelegate
         Item {
@@ -37,7 +36,6 @@ Item {
                            return FluColors.Blue
                        }
                        return FluColors.Grey110
-
                    }
                    border.width: 0
                    radius: 0
@@ -64,8 +62,6 @@ Item {
             delegate: openedFilesDelegate
         }
     }
-
-
 
     Rectangle {
         anchors{
@@ -215,9 +211,8 @@ Item {
                                 normalColor: "#71c4ef"
                                 onClicked: Executor.execute(Parser.parse(editorModel.text))
                             }
-
                         }
-
+                    }
                     Loader{
                         id: screenShotCom
                         onLoaded: {
@@ -226,10 +221,6 @@ Item {
                             });
                         }
                     }
-
-                    }
-
-
                 }
 
                 Rectangle {
@@ -239,13 +230,42 @@ Item {
                     color: "#fffefb"
                 }
 
-
                 Rectangle {
                     id: logPanel
                     width: rightPanel.width
                     height: rightPanel.height / 2
                     color: "#f5f4f1"
                     radius: 30
+                    clip: true
+                    ListView {
+                        id: logView
+                        anchors.fill: parent
+                        model: messageModel
+
+                        delegate: Text {
+                            text: modelData
+                            width: rightPanel.width
+                            wrapMode: Text.WrapAnywhere
+                        }
+                    }
+
+                    ListModel {
+                        id: messageModel
+                    }
+
+                    Connections {
+                        target: logController
+                        onMessageReceived: {
+                            print(message)
+                            if(message.startsWith("qrc:")){
+                                console.log(message);
+                            } else {
+                                console.log(message);
+                                messageModel.append({message: message})
+                                logView.positionViewAtIndex(logView.count - 1, ListView.End)
+                            }
+                        }
+                    }
                 }
             }
         }
