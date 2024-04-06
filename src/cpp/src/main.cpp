@@ -19,6 +19,7 @@
 #include "parser.h"
 #include "executor.h"
 #include "log_controller.h"
+#include "clipboard.h"
 
 int main(int argc, char *argv[])
 {
@@ -51,7 +52,9 @@ int main(int argc, char *argv[])
     Screenshot screenshot;
     Parser parser;
     Executor executor;
+    Clipboard clipboard;
     LogController *logController = LogController::instance();
+
 
 
     QQmlApplicationEngine engine;
@@ -64,10 +67,11 @@ int main(int argc, char *argv[])
     engine.rootContext()->setContextProperty("ScreenShot", &screenshot);
     engine.rootContext()->setContextProperty("Parser", &parser);
     engine.rootContext()->setContextProperty("Executor", &executor);
-    engine.rootContext()->setContextProperty("logController", logController);
+    engine.rootContext()->setContextProperty("Clipboard", &clipboard);
+    engine.rootContext()->setContextProperty("LogController", logController);
 
 
-    const QUrl url(QStringLiteral("qrc:/App.qml"));
+    const QUrl url(QStringLiteral("qrc:/src/views/App.qml"));
     QObject::connect(
         &engine,
         &QQmlApplicationEngine::objectCreated,

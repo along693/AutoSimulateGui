@@ -301,6 +301,7 @@ Window {
             }
             text: "退出"
             onClicked: {
+                WindowManager.showApplication();
                 close();
             }
         }
@@ -314,6 +315,7 @@ Window {
             text: "完成"
             onClicked: {
                 captureScreenshot(selectionRect.x, selectionRect.y, selectionRect.width, selectionRect.height);
+                WindowManager.showApplication();
                 close();
             }
         }

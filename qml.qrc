@@ -1,12 +1,17 @@
 <RCC>
-    <qresource prefix="/">
-        <file alias="main.qml">src/qml/main.qml</file>
-        <file alias="editor.qml">src/qml/editor.qml</file>
+    <qresource prefix="/src/views">
+        <file alias="main.qml">src/views/main.qml</file>
+        <file alias="editor.qml">src/views/editor.qml</file>
         <file>favicon.ico</file>
-        <file alias="event_edit.qml">src/qml/event_edit.qml</file>
-        <file alias="screenshot.qml">src/qml/screenshot.qml</file>
-        <file alias="CusDragRect.qml">src/qml/CusDragRect.qml</file>
-        <file alias="add_event.qml">src/qml/add_event.qml</file>
-        <file alias="App.qml">src/qml/App.qml</file>
+        <file alias="event_edit.qml">src/views/event_edit.qml</file>
+        <file alias="screenshot.qml">src/views/screenshot.qml</file>
+        <file alias="CusDragRect.qml">src/views/CusDragRect.qml</file>
+        <file alias="add_event.qml">src/views/add_event.qml</file>
+        <file alias="App.qml">src/views/App.qml</file>
+        <file alias="getCus.qml">src/views/getCus.qml</file>
+    </qresource>
+    <qresource prefix="/src/styles">
+        <file alias="LightTheme.qml">src/styles/LightTheme.qml</file>
+        <file alias="qmldir">src/styles/qmldir</file>
     </qresource>
 </RCC>

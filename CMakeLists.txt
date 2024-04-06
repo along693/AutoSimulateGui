@@ -25,6 +25,8 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
             qml.qrc
             src/cpp/header/log_controller.h
             src/cpp/src/log_controller.cpp
+            src/cpp/header/clipboard.h
+            src/cpp/src/clipboard.cpp
         )
 else()
     if(ANDROID)

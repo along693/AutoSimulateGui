@@ -10,8 +10,8 @@ Item {
         FluApp.init(app)
         FluTheme.enableAnimation = true
         FluApp.routes = {
-            "/":"qrc:/main.qml",
-            "/add_event":"qrc:/add_event.qml",
+            "/":"qrc:/src/views/main.qml",
+            "/add_event":"qrc:/src/views/add_event.qml",
         }
         FluApp.navigate("/")
     }
