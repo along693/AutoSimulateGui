@@ -56,7 +56,7 @@ FluWindow {
         FluPaneItem{
             icon: FluentIcons.Help
             title:"help"
-            url: "qrc:/src/views/getCus.qml"
+            url: "qrc:/src/views/add_event.qml"
             onTap:{
                 nav_view.push(url)
             }

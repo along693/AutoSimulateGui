@@ -2,6 +2,7 @@ import QtQuick
 import QtQuick.Pdf
 import QtQuick.Controls
 import FluentUI
+import QtQuick.Layouts
 
 Item {
     id: docView
@@ -11,19 +12,32 @@ Item {
     PdfDocument {
         id: doc
         source: "file:///C:/Users/long/Desktop/LanguageDescription/Description.pdf"
-        Component.onCompleted: {
-            print(doc.author, doc.creator, doc.keywords, doc.maxPageHeight, doc.maxPageWidth, doc.status)
+    }
+    TreeView {
+        id: bookmarksTree
+        width: parent.width / 4
+        height: parent.height
+        delegate: TreeViewDelegate {
+            required property int page
+            required property point location
+            required property real zoom
+            onClicked: pdfView.goToLocation(page, location, zoom)
         }
+        model: PdfBookmarkModel {
+            document: doc
+        }
+        ScrollBar.vertical: FluScrollBar { }
     }
 
     PdfMultiPageView {
         id: pdfView
-        anchors.fill: parent
-        document: doc
-        renderScale: 10
-        Component.onCompleted: {
-            pdfView.scaleToWidth(parent.width, parent.height)
+        anchors{
+            top: parent.top
+            bottom: parent.bottom
+            left: bookmarksTree.right
+            right: parent.right
         }
+        document: doc
 
         Keys.onPressed: (event)=> {
             if (event.key === Qt.Key_F && event.modifiers & Qt.ControlModifier) {

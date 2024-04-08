@@ -31,6 +31,7 @@ Item {
                 onClicked: mainController.fileNavigationController.fileOpenedClicked(fileId)
                 background: Rectangle {
                     color: button.checked ? "lightblue" : "transparent"
+                    radius: 5
                 }
             }
         }
@@ -42,16 +43,20 @@ Item {
             left: parent.left
             top: parent.top
             bottom: parent.bottom
+            topMargin: 4
         }
         width: 120
         height: parent.height
-        color: "#71c4ef"
+        color: "#FFFFFF"
         clip: true
         ListView{
             id: listView
             anchors.fill: parent
             model: documentsModel
             delegate: openedFilesDelegate
+            focus: true
+            highlightFollowsCurrentItem: true
+            currentIndex: fileNavigationModel.selectedIndex
         }
     }
     FluRectangle {
@@ -61,6 +66,8 @@ Item {
             top: parent.top
             bottom: parent.bottom
             left: filenamePanel.right
+            topMargin: 4
+
         }
         color: LightTheme.lineNumberBackground
 
@@ -68,12 +75,14 @@ Item {
             id: lineNumbersItem
             anchors.fill: parent
 
-            selectedBackgroundColor: LightTheme.lineNumberSelectedBackgroundColor
-            currentBackgroundColor: LightTheme.lineNumberCurrentBackgroundColor
+            // selectedBackgroundColor: LightTheme.lineNumberSelectedBackgroundColor
+            selectedBackgroundColor: "lightblue"
+            // currentBackgroundColor: LightTheme.lineNumberCurrentBackgroundColor
+            currentBackgroundColor: "#00619a"
             selectedTextColor: LightTheme.lineNumberSelectedTextColor
             currentTextColor: LightTheme.lineNumberCurrentTextColor
             textColor: LightTheme.lineNumberTextColor
-                font: LightTheme.editorFont
+            font: LightTheme.editorFont
 
             document: textArea.textDocument
             cursorPosition: textArea.cursorPosition
@@ -183,7 +192,7 @@ Item {
                             FluIconButton{
                                 iconSource: FluentIcons.Page
                                 iconSize: 20
-                                normalColor: LightTheme.color4
+                                normalColor: "lightblue"
                                 hoverColor: LightTheme.color1
                                 onClicked: mainController.menuController.newFileClicked();
                             }

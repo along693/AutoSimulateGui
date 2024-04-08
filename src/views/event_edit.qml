@@ -49,6 +49,9 @@ Item{
             anchors.fill: parent
             model: documentsModel
             delegate: openedFilesDelegate
+            focus: true
+            highlightFollowsCurrentItem: true
+            currentIndex: fileNavigationModel.selectedIndex
         }
     }
     TextArea{
@@ -91,7 +94,6 @@ Item{
             left: filenamePanel.right
         }
         width: parent.width*0.7
-        height: parent.height
         id: event_timeline
         ListModel{
             id:list_model
@@ -101,7 +103,6 @@ Item{
             Layout.topMargin: 20
             Layout.bottomMargin: 20
             width: parent.width
-            height: parent.height
             model: list_model
             mode: FluTimelineType.Left
         }
