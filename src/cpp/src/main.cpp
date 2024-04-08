@@ -20,6 +20,7 @@
 #include "executor.h"
 #include "log_controller.h"
 #include "clipboard.h"
+#include "line_numbers.h"
 
 int main(int argc, char *argv[])
 {
@@ -31,6 +32,8 @@ int main(int argc, char *argv[])
     qmlRegisterType<MenuController>("Editor", 1, 0, "MenuController");
     qmlRegisterType<FileNavigationController>("Editor", 1, 0, "FileNavigationController");
     qmlRegisterType<DocumentHandler>("Editor", 1, 0, "DocumentHandler");
+    qmlRegisterType<LineNumbers>("Editor", 1, 0, "LineNumbers");
+
 
 
     MainController main_controller;

@@ -3,7 +3,6 @@ import QtQuick 2.15
 Rectangle {
     id: root
 
-    //5.10之前, qml是不能定义枚举的，用只读的int属性代替一下。
     readonly property int posLeftTop: Qt.SizeFDiagCursor
     readonly property int posLeft: Qt.SizeHorCursor
     readonly property int posLeftBottom: Qt.SizeBDiagCursor

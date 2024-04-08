@@ -1,10 +1,12 @@
-// windowmanager.h
 #ifndef WINDOWMANAGER_H
 #define WINDOWMANAGER_H
 
 #include <QObject>
 #include <QGuiApplication>
 #include <QWindow>
+#include <QScreen>
+#include <QDebug>
+#include <QRegularExpression>
 
 class WindowManager : public QObject
 {
@@ -36,6 +38,20 @@ public slots:
             windows.first()->show();
             windows.first()->raise();
             windows.first()->requestActivate();
+        }
+    }
+
+    void switchToWindow(const QString &targetAppName) {
+        QRegularExpression regex(targetAppName, QRegularExpression::CaseInsensitiveOption);
+        QList<QWindow *> windows = QGuiApplication::topLevelWindows();
+
+        for (QWindow *window : windows) {
+            if (regex.match(window->title()).hasMatch()) {
+                window->show();
+                window->raise();
+                window->requestActivate();
+                return; // 停止查找
+            }
         }
     }
 

@@ -1,7 +1,8 @@
-import QtQuick 2.15
+import QtQuick
 import FluentUI
 import QtQuick.Controls 2.15
 import QtQuick.Dialogs
+import QtQuick.Layouts
 import Qt.labs.platform
 import Editor 1.0
 import "../styles"
@@ -20,7 +21,7 @@ Item {
         Item {
             width: filenamePanel.width
             height: 25
-            Button {
+            FluButton {
                 id: button
                 checked: index === listView.currentIndex
                 checkable: true
@@ -29,31 +30,21 @@ Item {
                 ButtonGroup.group: openedFileButtonGroup
                 onClicked: mainController.fileNavigationController.fileOpenedClicked(fileId)
                 background: Rectangle {
-                   color: {
-                       if (button.checked) {
-                           return FluColors.White
-                       }
-                       if (button.hovered) {
-                           return FluColors.Blue
-                       }
-                       return FluColors.Grey110
-                   }
-                   border.width: 0
-                   radius: 0
-                }
-                contentItem: Text {
-                    text: button.text
-                    verticalAlignment: Text.AlignVCenter
-                    color: "#1d195e"
+                    color: button.checked ? "lightblue" : "transparent"
                 }
             }
         }
     }
 
-    Rectangle {
-        implicitHeight: parent.height
-        implicitWidth: 120
+    FluRectangle {
         id: filenamePanel
+        anchors{
+            left: parent.left
+            top: parent.top
+            bottom: parent.bottom
+        }
+        width: 120
+        height: parent.height
         color: "#71c4ef"
         clip: true
         ListView{
@@ -63,23 +54,32 @@ Item {
             delegate: openedFilesDelegate
         }
     }
-
-    Rectangle {
+    FluRectangle {
+        id: lineNumberPanel
+        width: 35
         anchors{
             top: parent.top
             bottom: parent.bottom
             left: filenamePanel.right
         }
-        width: 30
-        height: root.height
-        id: lineNumberPanel
-        color: "#b6ccd8"
-        ListView {
+        color: LightTheme.lineNumberBackground
+
+        LineNumbers {
+            id: lineNumbersItem
             anchors.fill: parent
-            model: fileLineContent
-            delegate: Text {
-                text: modelData
-            }
+
+            selectedBackgroundColor: LightTheme.lineNumberSelectedBackgroundColor
+            currentBackgroundColor: LightTheme.lineNumberCurrentBackgroundColor
+            selectedTextColor: LightTheme.lineNumberSelectedTextColor
+            currentTextColor: LightTheme.lineNumberCurrentTextColor
+            textColor: LightTheme.lineNumberTextColor
+                font: LightTheme.editorFont
+
+            document: textArea.textDocument
+            cursorPosition: textArea.cursorPosition
+            selectionStart: textArea.selectionStart
+            selectionEnd: textArea.selectionEnd
+            offsetY: textEditor.contentY
         }
     }
 
@@ -124,44 +124,49 @@ Item {
         onActivated: mainController.menuController.newFileClicked();
     }
 
-    FluSplitLayout {
-        id: splitView
-        anchors {
-            top: parent.top
-            bottom: parent.bottom
-            right: parent.right
-            left: lineNumberPanel.right
-        }
-        handleColor: LightTheme.color2
         Flickable {
             id: textEditor
-            width: parent.width - lineNumberPanel.width - filenamePanel.width
-            height: parent.height
-            implicitWidth: 580
-            implicitHeight: parent.height
-            contentWidth: textEditor.width
-            contentHeight: textEditor.height
+            anchors {
+                top: parent.top
+                bottom: parent.bottom
+                left: lineNumberPanel.right
+                leftMargin: 4
+            }
+            width: (parent.width - lineNumberPanel.width - filenamePanel.width) / 3 * 2
+            clip: true
+            contentWidth: textArea.width
+            contentHeight: textArea.height
+            onContentYChanged: lineNumbersItem.update()
             boundsBehavior: Flickable.StopAtBounds
+
             TextArea.flickable: TextArea {
                 id: textArea
-                color: LightTheme.color2
                 textFormat: Qt.PlainText
-                font: FluTextStyle.Subtitle
                 background: null
+                font: LightTheme.editorFont
+                // font: LightTheme.editorFont
                 selectByMouse: true
-                wrapMode: TextEdit.WordWrap
+                selectionColor: LightTheme.lineNumberSelectedTextColor
+
                 Component.onCompleted: {
                     editorModel.document = textArea.textDocument
                 }
             }
+
             ScrollBar.vertical: FluScrollBar {}
             ScrollBar.horizontal: FluScrollBar {}
         }
 
-        Rectangle {
+        FluRectangle {
             id: rightPanel
-            width: (root.width - lineNumberPanel.width) * 1 / 3
-            height: splitView.height
+            anchors{
+                top: parent.top
+                bottom: parent.bottom
+                left: textEditor.right
+            }
+
+            width: (parent.width - lineNumberPanel.width - filenamePanel.width) / 3
+            height: parent.height
 
             Column {
                 width: rightPanel.width
@@ -271,8 +276,6 @@ Item {
                         }
                         Component.onCompleted: {
                             LogController.addLog(LogController.Info, "This is an info message.");
-                            print(1123)
-                            print(LogController.getLogs())
                         }
                         onCountChanged: {
                             // 在添加新项目时滚动到最后一行
@@ -282,5 +285,4 @@ Item {
                 }
             }
         }
-    }
 }

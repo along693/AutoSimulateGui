@@ -19,7 +19,7 @@ Item {
     PdfMultiPageView {
         id: pdfView
         anchors.fill: parent
-        document:doc
+        document: doc
         renderScale: 10
         Component.onCompleted: {
             pdfView.scaleToWidth(parent.width, parent.height)

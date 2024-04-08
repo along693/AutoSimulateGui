@@ -11,7 +11,7 @@ FluWindow {
     id:window
     visible: true
     width: 960
-    height: 600
+    height: 640
     minimumWidth: 520
     minimumHeight: 200
     fitsAppBarWindows: true
@@ -85,7 +85,6 @@ FluWindow {
     }
 
     FluNavigationView{
-        logo: "qrc:/favicon.ico"
         title:"AutoSimulate"
         id:nav_view
         width: parent.width

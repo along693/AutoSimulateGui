@@ -18,16 +18,14 @@ QtObject {
     property color primaryColor: "#FF5733"
     property color secondaryColor: "#3366FF"
     property color textColor: "#333333"
-    property int fontSize: 16
 
-    // Button properties
-    property color buttonBackgroundColor: style.primaryColor
-    property color buttonTextColor: "white"
-    property int buttonCornerRadius: 5
-
-    // TextField properties
-    property color textFieldBorderColor: style.secondaryColor
-    property color textFieldFocusColor: style.primaryColor
-    property color textFieldTextColor: style.textColor
-    property int textFieldBorderWidth: 2
+    //General used by many properties
+    property color mainBlueColor: "#161161"
+    property color lineNumberBackground: "#d3d3d3"
+    property color lineNumberSelectedBackgroundColor: "#b2d7ff"
+    property alias lineNumberCurrentBackgroundColor: style.mainBlueColor
+    property alias lineNumberSelectedTextColor: style.mainBlueColor
+    property color lineNumberCurrentTextColor: "white"
+    property alias lineNumberTextColor: style.mainBlueColor
+    property font editorFont: Qt.font({family: "Hack", pointSize: 14})
 }
