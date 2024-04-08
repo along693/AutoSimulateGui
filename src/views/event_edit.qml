@@ -5,12 +5,56 @@ import QtQuick.Dialogs
 import QtQuick.Layouts
 import Qt.labs.platform
 import Editor 1.0
+import "../styles"
 
 Item{
     property var qmlWindow: null
+    ButtonGroup {
+        id: openedFileButtonGroup
+    }
+
+    Component {
+        id: openedFilesDelegate
+        Item {
+            width: filenamePanel.width
+            height: 25
+            FluButton {
+                id: button
+                checked: index === listView.currentIndex
+                checkable: true
+                anchors.fill: parent
+                text: filename + (fileNeedsSaving ? "*" : "")
+                ButtonGroup.group: openedFileButtonGroup
+                onClicked: mainController.fileNavigationController.fileOpenedClicked(fileId)
+                background: Rectangle {
+                    color: button.checked ? "lightblue" : "transparent"
+                }
+            }
+        }
+    }
+
+    FluRectangle {
+        id: filenamePanel
+        anchors{
+            left: parent.left
+            top: parent.top
+            bottom: parent.bottom
+        }
+        width: 120
+        height: parent.height
+        color: "#71c4ef"
+        clip: true
+        ListView{
+            id: listView
+            anchors.fill: parent
+            model: documentsModel
+            delegate: openedFilesDelegate
+        }
+    }
     TextArea{
         id: hiddenText
         visible: false
+
         Component.onCompleted: {
             editorModel.document = hiddenText.textDocument
         }
@@ -41,6 +85,11 @@ Item{
 
 
     FluScrollablePage{
+        anchors{
+            top: parent.top
+            bottom: parent.bottom
+            left: filenamePanel.right
+        }
         width: parent.width*0.7
         height: parent.height
         id: event_timeline
@@ -122,31 +171,31 @@ Item{
             Column{
             Row{
                 FluIconButton{
-                    iconSource: FluentIcons.GlobalNavButton
-                    iconSize: 25
-                    normalColor: "#71c4ef"
-                    hoverColor: "#d4eaf7"
+                    iconSource: FluentIcons.Page
+                    iconSize: 20
+                    normalColor: LightTheme.color4
+                    hoverColor: LightTheme.color1
                     onClicked: mainController.menuController.newFileClicked();
                 }
                 FluIconButton{
-                    iconSource: FluentIcons.GlobalNavButton
-                    iconSize: 25
-                    normalColor: "#71c4ef"
-                    hoverColor: "#d4eaf7"
+                    iconSource: FluentIcons.FolderOpen
+                    iconSize: 20
+                    normalColor: LightTheme.color4
+                    hoverColor: LightTheme.color1
                     onClicked: openDialog.open()
                 }
                 FluIconButton{
-                    iconSource: FluentIcons.GlobalNavButton
-                    iconSize: 25
-                    normalColor: "#71c4ef"
-                    hoverColor: "#d4eaf7"
+                    iconSource: FluentIcons.SaveAs
+                    iconSize: 20
+                    normalColor: LightTheme.color4
+                    hoverColor: LightTheme.color1
                     onClicked: saveDialog.open()
                 }
                 FluIconButton{
-                    iconSource: FluentIcons.GlobalNavButton
-                    iconSize: 25
-                    normalColor: "#71c4ef"
-                    hoverColor: "#d4eaf7"
+                    iconSource: FluentIcons.Play
+                    iconSize: 20
+                    normalColor: LightTheme.color4
+                    hoverColor: LightTheme.color1
                     onClicked: Executor.execute(Parser.parse(editorModel.text))
                 }
             }

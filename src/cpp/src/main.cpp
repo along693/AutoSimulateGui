@@ -21,6 +21,7 @@
 #include "log_controller.h"
 #include "clipboard.h"
 #include "line_numbers.h"
+#include "find_application.h"
 
 int main(int argc, char *argv[])
 {
@@ -57,6 +58,7 @@ int main(int argc, char *argv[])
     Executor executor;
     Clipboard clipboard;
     LogController *logController = LogController::instance();
+    FindApplication findApplication;
 
 
 
@@ -72,6 +74,7 @@ int main(int argc, char *argv[])
     engine.rootContext()->setContextProperty("Executor", &executor);
     engine.rootContext()->setContextProperty("Clipboard", &clipboard);
     engine.rootContext()->setContextProperty("LogController", logController);
+    engine.rootContext()->setContextProperty("FindApplication", &findApplication);
 
 
     const QUrl url(QStringLiteral("qrc:/src/views/App.qml"));

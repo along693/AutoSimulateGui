@@ -132,7 +132,7 @@ Item {
                 left: lineNumberPanel.right
                 leftMargin: 4
             }
-            width: (parent.width - lineNumberPanel.width - filenamePanel.width) / 3 * 2
+            width: (parent.width - lineNumberPanel.width - filenamePanel.width) / 5 * 4
             clip: true
             contentWidth: textArea.width
             contentHeight: textArea.height
@@ -165,7 +165,7 @@ Item {
                 left: textEditor.right
             }
 
-            width: (parent.width - lineNumberPanel.width - filenamePanel.width) / 3
+            width: (parent.width - lineNumberPanel.width - filenamePanel.width) / 5
             height: parent.height
 
             Column {
@@ -199,7 +199,8 @@ Item {
                                 iconSize: 20
                                 normalColor: LightTheme.color4
                                 hoverColor: LightTheme.color1
-                                onClicked: saveDialog.open()
+                                // onClicked: saveDialog.open()
+                                onClicked: FindApplication.switchToWindow("python");
                             }
                             FluIconButton{
                                 iconSource: FluentIcons.Click
@@ -273,6 +274,7 @@ Item {
                             text: modelData
                             width: rightPanel.width
                             wrapMode: Text.WrapAnywhere
+                            font: LightTheme.logFont
                         }
                         Component.onCompleted: {
                             LogController.addLog(LogController.Info, "This is an info message.");

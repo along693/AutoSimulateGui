@@ -29,6 +29,8 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
             src/cpp/src/clipboard.cpp
             src/cpp/header/line_numbers.h
             src/cpp/src/line_numbers.cpp
+            src/cpp/header/find_application.h
+            src/cpp/src/find_application.cpp
         )
 else()
     if(ANDROID)

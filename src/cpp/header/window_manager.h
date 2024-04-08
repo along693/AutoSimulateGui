@@ -46,6 +46,7 @@ public slots:
         QList<QWindow *> windows = QGuiApplication::topLevelWindows();
 
         for (QWindow *window : windows) {
+            qDebug() << window->title();
             if (regex.match(window->title()).hasMatch()) {
                 window->show();
                 window->raise();

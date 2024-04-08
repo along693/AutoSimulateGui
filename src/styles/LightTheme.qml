@@ -28,4 +28,5 @@ QtObject {
     property color lineNumberCurrentTextColor: "white"
     property alias lineNumberTextColor: style.mainBlueColor
     property font editorFont: Qt.font({family: "Hack", pointSize: 14})
+    property font logFont: Qt.font({family: "Hack", pointSize: 10})
 }
