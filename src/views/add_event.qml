@@ -15,8 +15,16 @@ Item {
     }
     TreeView {
         id: bookmarksTree
+        anchors{
+            left: parent.left
+            top: parent.top
+            bottom: parent.bottom
+            right: pdfView.left
+        }
+
         width: parent.width / 4
         height: parent.height
+        clip: true
         delegate: TreeViewDelegate {
             required property int page
             required property point location

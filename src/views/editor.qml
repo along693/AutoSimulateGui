@@ -30,8 +30,9 @@ Item {
                 ButtonGroup.group: openedFileButtonGroup
                 onClicked: mainController.fileNavigationController.fileOpenedClicked(fileId)
                 background: Rectangle {
-                    color: button.checked ? "lightblue" : "transparent"
-                    radius: 5
+                    // color: button.checked ? "#FFB9DDFF" : "transparent"
+                    color: (FluTheme.darkMode === FluThemeType.Light) ? button.checked? LightTheme.color4 : "transparent" : button.checked? "#262c36" : "black"
+                    radius: 10
                 }
             }
         }
@@ -47,7 +48,7 @@ Item {
         }
         width: 120
         height: parent.height
-        color: "#FFFFFF"
+        color: (FluTheme.darkMode === FluThemeType.Light) ? "#FFFFFF" : "#1a1b1e"
         clip: true
         ListView{
             id: listView
@@ -69,19 +70,19 @@ Item {
             topMargin: 4
 
         }
-        color: LightTheme.lineNumberBackground
+        color: (FluTheme.darkMode === FluThemeType.Light) ? "#f5f4f1" : "#1c1c10"
 
         LineNumbers {
             id: lineNumbersItem
             anchors.fill: parent
 
             // selectedBackgroundColor: LightTheme.lineNumberSelectedBackgroundColor
-            selectedBackgroundColor: "lightblue"
+            selectedBackgroundColor: "#FFB9DDFF"
             // currentBackgroundColor: LightTheme.lineNumberCurrentBackgroundColor
             currentBackgroundColor: "#00619a"
             selectedTextColor: LightTheme.lineNumberSelectedTextColor
             currentTextColor: LightTheme.lineNumberCurrentTextColor
-            textColor: LightTheme.lineNumberTextColor
+            textColor: (FluTheme.darkMode === FluThemeType.Light) ? LightTheme.lineNumberTextColor : DarkTheme.lineNumberTextColor
             font: LightTheme.editorFont
 
             document: textArea.textDocument
@@ -153,10 +154,9 @@ Item {
                 textFormat: Qt.PlainText
                 background: null
                 font: LightTheme.editorFont
-                // font: LightTheme.editorFont
                 selectByMouse: true
                 selectionColor: LightTheme.lineNumberSelectedTextColor
-
+                color: FluTheme.darkMode === FluThemeType.Light ? LightTheme.textColor : DarkTheme.textColor
                 Component.onCompleted: {
                     editorModel.document = textArea.textDocument
                 }
@@ -173,6 +173,7 @@ Item {
                 bottom: parent.bottom
                 left: textEditor.right
             }
+            color: (FluTheme.darkMode === FluThemeType.Light) ? "#ffffff" : "#1c1c10"
 
             width: (parent.width - lineNumberPanel.width - filenamePanel.width) / 5
             height: parent.height
@@ -185,37 +186,39 @@ Item {
                     id: actionPanel
                     width: rightPanel.width
                     height: rightPanel.height / 5 * 2
-                    color:"#f5f4f1"
+                    color: (FluTheme.darkMode === FluThemeType.Light) ? "#f5f4f1" : "#1c1c10"
                     radius: 30
                     Column{
                         Row{
                             FluIconButton{
                                 iconSource: FluentIcons.Page
                                 iconSize: 20
-                                normalColor: "lightblue"
-                                hoverColor: LightTheme.color1
+                                // color: (FluTheme.darkMode === FluThemeType.Light) ? "#FFFFFF" : "#1a1a1a"
+
+                                normalColor: FluTheme.darkMode === FluThemeType.Light ? LightTheme.color4 : DarkTheme.color4
+                                hoverColor: FluTheme.darkMode === FluThemeType.Light ? LightTheme.color1 : DarkTheme.color1
                                 onClicked: mainController.menuController.newFileClicked();
                             }
                             FluIconButton{
                                 iconSource: FluentIcons.FolderOpen
                                 iconSize: 20
-                                normalColor: LightTheme.color4
-                                hoverColor: LightTheme.color1
+                                normalColor: FluTheme.darkMode === FluThemeType.Light ? LightTheme.color4 : DarkTheme.color4
+                                hoverColor: FluTheme.darkMode === FluThemeType.Light ? LightTheme.color1 : DarkTheme.color1
                                 onClicked: openDialog.open()
                             }
                             FluIconButton{
                                 iconSource: FluentIcons.SaveAs
                                 iconSize: 20
-                                normalColor: LightTheme.color4
-                                hoverColor: LightTheme.color1
+                                normalColor: FluTheme.darkMode === FluThemeType.Light ? LightTheme.color4 : DarkTheme.color4
+                                hoverColor: FluTheme.darkMode === FluThemeType.Light ? LightTheme.color1 : DarkTheme.color1
                                 // onClicked: saveDialog.open()
                                 onClicked: FindApplication.switchToWindow("python");
                             }
                             FluIconButton{
                                 iconSource: FluentIcons.Click
                                 iconSize: 20
-                                normalColor: LightTheme.color4
-                                hoverColor: LightTheme.color1
+                                normalColor: FluTheme.darkMode === FluThemeType.Light ? LightTheme.color4 : DarkTheme.color4
+                                hoverColor: FluTheme.darkMode === FluThemeType.Light ? LightTheme.color1 : DarkTheme.color1
                                 onClicked:{
                                     WindowManager.hideApplication()
                                     getCusCom.source = "getCus.qml";
@@ -226,8 +229,8 @@ Item {
                             FluIconButton{
                                 iconSource: FluentIcons.Add
                                 iconSize: 20
-                                normalColor: LightTheme.color4
-                                hoverColor: LightTheme.color1
+                                normalColor: FluTheme.darkMode === FluThemeType.Light ? LightTheme.color4 : DarkTheme.color4
+                                hoverColor: FluTheme.darkMode === FluThemeType.Light ? LightTheme.color1 : DarkTheme.color1
                                 onClicked: {
                                     WindowManager.hideApplication();
                                     screenShotCom.source = "screenshot.qml";
@@ -236,8 +239,8 @@ Item {
                             FluIconButton{
                                 iconSource: FluentIcons.Play
                                 iconSize: 20
-                                normalColor: LightTheme.color4
-                                hoverColor: LightTheme.color1
+                                normalColor: FluTheme.darkMode === FluThemeType.Light ? LightTheme.color4 : DarkTheme.color4
+                                hoverColor: FluTheme.darkMode === FluThemeType.Light ? LightTheme.color1 : DarkTheme.color1
                                 onClicked: Executor.execute(Parser.parse(editorModel.text))
                             }
                         }
@@ -264,14 +267,14 @@ Item {
                     id: splitLine
                     width: rightPanel.width
                     height: rightPanel.height / 5
-                    color: "#fffefb"
+                    color: (FluTheme.darkMode === FluThemeType.Light) ? "#FFFFFF" : "#1a1a1a"
                 }
 
                 Rectangle {
                     id: logPanel
                     width: rightPanel.width
                     height: rightPanel.height / 5 * 2
-                    color: "#f5f4f1"
+                    color: (FluTheme.darkMode === FluThemeType.Light) ? "#f5f4f1" : "#1c1c10"
                     radius: 30
                     clip: true
                     ListView {
@@ -279,7 +282,7 @@ Item {
                         anchors.fill: parent
                         model: LogController.logs
 
-                        delegate: Text {
+                        delegate: FluText {
                             text: modelData
                             width: rightPanel.width
                             wrapMode: Text.WrapAnywhere
@@ -289,7 +292,6 @@ Item {
                             LogController.addLog(LogController.Info, "This is an info message.");
                         }
                         onCountChanged: {
-                            // 在添加新项目时滚动到最后一行
                             positionViewAtEnd();
                         }
                     }
