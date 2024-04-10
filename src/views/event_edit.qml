@@ -283,6 +283,12 @@ Item{
                 viewModel.text4 = text
                 }
             }
+            Rectangle {
+                id: space2
+                width: rightPanel.width
+                height: 10
+                color: (FluTheme.darkMode === FluThemeType.Light) ? "#FFFFFF" : "#1a1a1a"
+            }
 
             FluFilledButton{
                 text: qsTr("Append")

@@ -237,6 +237,7 @@ Item {
                                 // onClicked: saveDialog.open()
                                 onClicked: {
                                     WindowManager.hideApplication();
+                                    FindApplication.switchToWindow("word");
                                     AutoGuiTester.runTests()
                                     WindowManager.showApplication();
                                 }

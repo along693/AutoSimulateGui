@@ -23,7 +23,6 @@
 #include "line_numbers.h"
 #include "find_application.h"
 #include "mouse.h"
-#include "mouse_evnet_spy.h"
 
 int main(int argc, char *argv[])
 {
@@ -36,7 +35,6 @@ int main(int argc, char *argv[])
     qmlRegisterType<FileNavigationController>("Editor", 1, 0, "FileNavigationController");
     qmlRegisterType<DocumentHandler>("Editor", 1, 0, "DocumentHandler");
     qmlRegisterType<LineNumbers>("Editor", 1, 0, "LineNumbers");
-    qmlRegisterType<MouseEventSpy>("MouseEventSpy", 1, 0, "MouseEventSpy");
 
 
 

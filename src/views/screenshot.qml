@@ -1,10 +1,12 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.5
 import QtQuick.Window 2.14
+import QtQuick.Dialogs
 
 Window {
     id: root
 
+    property var pixmap: null
     readonly property int borderMargin: 3
     readonly property color tranparentColor: "transparent"       //透明色
     readonly property color blurryColor: Qt.rgba(0,0,0,0.3)      //模糊色
@@ -277,7 +279,6 @@ Window {
                 var point = mapToGlobal(mousePoint);
                 selectionRect.x = Math.min(point.x, selectionRect.startPoint.x);
                 selectionRect.width = Math.max(selectionRect.startPoint.x, point.x)  - selectionRect.x;
-
             }
         }
     }
@@ -305,6 +306,22 @@ Window {
                 close();
             }
         }
+        FileDialog {
+            id: fileDialog
+            title: "Save Image"
+            nameFilters: ["Images (*.png *.jpg)", "All Files (*)"]
+            fileMode: FileDialog.SaveFile
+            currentFile: "file:///"+"capture.png"
+            defaultSuffix: ".png"
+            onAccepted: {
+                var filePath = fileDialog.currentFile.toString().substring(8)
+                print(filePath)
+                WindowManager.showApplication();
+                root.close();
+                ScreenShot.saveCapture(pixmap, filePath);
+            }
+        }
+
 
         Button{
             id: oKBtn
@@ -314,16 +331,14 @@ Window {
             }
             text: "完成"
             onClicked: {
-                captureScreenshot(selectionRect.x, selectionRect.y, selectionRect.width, selectionRect.height);
-                WindowManager.showApplication();
-                close();
+                pixmap = captureScreenshot(selectionRect.x, selectionRect.y, selectionRect.width, selectionRect.height);
+                fileDialog.open();
             }
         }
     }
 
-
     function captureScreenshot(x, y, width, height) {
-        ScreenShot.captureArea(x, y, width, height);
+        return ScreenShot.captureArea(x, y, width, height);
     }
 }
 
