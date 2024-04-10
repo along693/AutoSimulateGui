@@ -31,6 +31,8 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
             src/cpp/src/line_numbers.cpp
             src/cpp/header/find_application.h
             src/cpp/src/find_application.cpp
+            src/cpp/header/mouse_evnet_spy.h
+            src/cpp/src/mouse_event_spy.cpp
         )
 else()
     if(ANDROID)

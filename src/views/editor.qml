@@ -31,7 +31,7 @@ Item {
                 onClicked: mainController.fileNavigationController.fileOpenedClicked(fileId)
                 background: Rectangle {
                     // color: button.checked ? "#FFB9DDFF" : "transparent"
-                    color: (FluTheme.darkMode === FluThemeType.Light) ? button.checked? LightTheme.color4 : "transparent" : button.checked? "#262c36" : "black"
+                    color: (FluTheme.darkMode === FluThemeType.Light) ? button.checked? LightTheme.color4 : "transparent" : button.checked? "#262c36" : "#1a1b1e"
                     radius: 10
                 }
             }
@@ -151,7 +151,7 @@ Item {
 
             TextArea.flickable: TextArea {
                 id: textArea
-                textFormat: Qt.PlainText
+                textFormat: TextEdit.RichText
                 background: null
                 font: LightTheme.editorFont
                 selectByMouse: true
@@ -159,6 +159,31 @@ Item {
                 color: FluTheme.darkMode === FluThemeType.Light ? LightTheme.textColor : DarkTheme.textColor
                 Component.onCompleted: {
                     editorModel.document = textArea.textDocument
+                }
+                property bool processing: false
+
+                function highlightKeywords(text, keywords) {
+                    var processedText = text;
+                    for (var i = 0; i < keywords.length; ++i) {
+                        var keyword = keywords[i];
+                        var keywordPattern = new RegExp("\\b" + keyword + "\\b", 'g'); // 使用单词边界确保只匹配整个关键字
+                        processedText = processedText.replace(keywordPattern, function(match) {
+                            return "<span style='color:#FF0000'>" + match + "</span>";
+                        });
+                    }
+                    return processedText;
+                }
+
+                // 实时应用高亮效果
+                onTextChanged: {
+                    if (!processing) {
+                        processing = true;
+                        var cursorPos = textArea.cursorPosition;
+                        var newText = highlightKeywords(textArea.text,["find", "locate", "click", "scroll", "drag", "capture", "delay", "write", "loop", "endloop"]);
+                        textArea.text = newText;
+                        textArea.cursorPosition = cursorPos;
+                        processing = false;
+                    }
                 }
             }
 
@@ -193,8 +218,6 @@ Item {
                             FluIconButton{
                                 iconSource: FluentIcons.Page
                                 iconSize: 20
-                                // color: (FluTheme.darkMode === FluThemeType.Light) ? "#FFFFFF" : "#1a1a1a"
-
                                 normalColor: FluTheme.darkMode === FluThemeType.Light ? LightTheme.color4 : DarkTheme.color4
                                 hoverColor: FluTheme.darkMode === FluThemeType.Light ? LightTheme.color1 : DarkTheme.color1
                                 onClicked: mainController.menuController.newFileClicked();
@@ -212,7 +235,11 @@ Item {
                                 normalColor: FluTheme.darkMode === FluThemeType.Light ? LightTheme.color4 : DarkTheme.color4
                                 hoverColor: FluTheme.darkMode === FluThemeType.Light ? LightTheme.color1 : DarkTheme.color1
                                 // onClicked: saveDialog.open()
-                                onClicked: FindApplication.switchToWindow("python");
+                                onClicked: {
+                                    WindowManager.hideApplication();
+                                    AutoGuiTester.runTests()
+                                    WindowManager.showApplication();
+                                }
                             }
                             FluIconButton{
                                 iconSource: FluentIcons.Click

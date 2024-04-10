@@ -22,6 +22,8 @@
 #include "clipboard.h"
 #include "line_numbers.h"
 #include "find_application.h"
+#include "mouse.h"
+#include "mouse_evnet_spy.h"
 
 int main(int argc, char *argv[])
 {
@@ -34,6 +36,7 @@ int main(int argc, char *argv[])
     qmlRegisterType<FileNavigationController>("Editor", 1, 0, "FileNavigationController");
     qmlRegisterType<DocumentHandler>("Editor", 1, 0, "DocumentHandler");
     qmlRegisterType<LineNumbers>("Editor", 1, 0, "LineNumbers");
+    qmlRegisterType<MouseEventSpy>("MouseEventSpy", 1, 0, "MouseEventSpy");
 
 
 
@@ -59,6 +62,7 @@ int main(int argc, char *argv[])
     Clipboard clipboard;
     LogController *logController = LogController::instance();
     FindApplication findApplication;
+    AutoGuiTester autoGuiTester;
 
 
 
@@ -75,6 +79,7 @@ int main(int argc, char *argv[])
     engine.rootContext()->setContextProperty("Clipboard", &clipboard);
     engine.rootContext()->setContextProperty("LogController", logController);
     engine.rootContext()->setContextProperty("FindApplication", &findApplication);
+    engine.rootContext()->setContextProperty("AutoGuiTester", &autoGuiTester);
 
 
     const QUrl url(QStringLiteral("qrc:/src/views/App.qml"));

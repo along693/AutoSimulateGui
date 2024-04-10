@@ -27,7 +27,9 @@ Item{
                 ButtonGroup.group: openedFileButtonGroup
                 onClicked: mainController.fileNavigationController.fileOpenedClicked(fileId)
                 background: Rectangle {
-                    color: button.checked ? "lightblue" : "transparent"
+                    // color: button.checked ? "#FFB9DDFF" : "transparent"
+                    color: (FluTheme.darkMode === FluThemeType.Light) ? button.checked? LightTheme.color4 : "transparent" : button.checked? "#262c36" : "#1a1b1e"
+                    radius: 10
                 }
             }
         }
@@ -39,10 +41,11 @@ Item{
             left: parent.left
             top: parent.top
             bottom: parent.bottom
+            topMargin: 4
         }
         width: 120
         height: parent.height
-        color: "#71c4ef"
+        color: (FluTheme.darkMode === FluThemeType.Light) ? "#FFFFFF" : "#1a1b1e"
         clip: true
         ListView{
             id: listView
@@ -88,13 +91,13 @@ Item{
 
 
     FluScrollablePage{
+        id: event_timeline
         anchors{
             top: parent.top
             bottom: parent.bottom
             left: filenamePanel.right
         }
         width: parent.width*0.7
-        id: event_timeline
         ListModel{
             id:list_model
         }
@@ -106,6 +109,10 @@ Item{
             model: list_model
             mode: FluTimelineType.Left
         }
+        // onTextChanged: {
+            // event_timeline.
+            // flickable.contentY = Math.max(0, contentHeight - height)
+        // }
     }
 
     FileDialog {
@@ -158,6 +165,7 @@ Item{
         }
         width: parent.width - event_timeline.width
         height: parent.height
+        color: (FluTheme.darkMode === FluThemeType.Light) ? "#ffffff" : "#1c1c10"
 
         Column {
             width: rightPanel.width
@@ -167,38 +175,44 @@ Item{
             id: actionPanel
             width: rightPanel.width
             height: rightPanel.height / 2
-            color:"#f5f4f1"
+            color: (FluTheme.darkMode === FluThemeType.Light) ? "#f5f4f1" : "#1c1c10"
             radius: 30
             Column{
             Row{
                 FluIconButton{
                     iconSource: FluentIcons.Page
                     iconSize: 20
-                    normalColor: LightTheme.color4
-                    hoverColor: LightTheme.color1
+                    normalColor: FluTheme.darkMode === FluThemeType.Light ? LightTheme.color4 : DarkTheme.color4
+                    hoverColor: FluTheme.darkMode === FluThemeType.Light ? LightTheme.color1 : DarkTheme.color1
                     onClicked: mainController.menuController.newFileClicked();
                 }
                 FluIconButton{
                     iconSource: FluentIcons.FolderOpen
                     iconSize: 20
-                    normalColor: LightTheme.color4
-                    hoverColor: LightTheme.color1
+                    normalColor: FluTheme.darkMode === FluThemeType.Light ? LightTheme.color4 : DarkTheme.color4
+                    hoverColor: FluTheme.darkMode === FluThemeType.Light ? LightTheme.color1 : DarkTheme.color1
                     onClicked: openDialog.open()
                 }
                 FluIconButton{
                     iconSource: FluentIcons.SaveAs
                     iconSize: 20
-                    normalColor: LightTheme.color4
-                    hoverColor: LightTheme.color1
+                    normalColor: FluTheme.darkMode === FluThemeType.Light ? LightTheme.color4 : DarkTheme.color4
+                    hoverColor: FluTheme.darkMode === FluThemeType.Light ? LightTheme.color1 : DarkTheme.color1
                     onClicked: saveDialog.open()
                 }
                 FluIconButton{
                     iconSource: FluentIcons.Play
                     iconSize: 20
-                    normalColor: LightTheme.color4
-                    hoverColor: LightTheme.color1
+                    normalColor: FluTheme.darkMode === FluThemeType.Light ? LightTheme.color4 : DarkTheme.color4
+                    hoverColor: FluTheme.darkMode === FluThemeType.Light ? LightTheme.color1 : DarkTheme.color1
                     onClicked: Executor.execute(Parser.parse(editorModel.text))
                 }
+            }
+            Rectangle {
+                id: space
+                width: rightPanel.width
+                height: 20
+                color: (FluTheme.darkMode === FluThemeType.Light) ? "#FFFFFF" : "#1a1a1a"
             }
             ListModel{
                 id: parameterInput
@@ -207,6 +221,7 @@ Item{
                 id: keywordComboBox
                 textRole: "text"
                 model: ListModel {
+                    ListElement { text: "find"; parameterCount: 1 }
                     ListElement { text: "locate"; parameterCount: 1 }
                     ListElement { text: "click"; parameterCount: 3 }
                     ListElement { text: "scroll"; parameterCount: 2 }
@@ -279,7 +294,6 @@ Item{
                     var keyword = keywordComboBox.model.get(keywordComboBox.currentIndex).text;
                     var parameters = [parameter1.text, parameter2.text, parameter3.text, parameter4.text];
                     var parameterString = parameters.join(" ");
-                    // list_model.append({lable: keywordComboBox.model.get(keywordComboBox.currentIndex).text, text:parameterString});
                     console.log("keyword:", keywordComboBox.model.get(keywordComboBox.currentIndex).text);
                     console.log("Parameters:", parameterString);
                     hiddenText.text += keyword + " " + parameterString + '\n';
@@ -292,13 +306,13 @@ Item{
                 id: splitLine
                 width: rightPanel.width
                 height: 5
-                color: "#fffefb"
+                color: (FluTheme.darkMode === FluThemeType.Light) ? "#FFFFFF" : "#1a1a1a"
             }
             Rectangle {
                 id: logPanel
                 width: rightPanel.width
                 height: rightPanel.height / 2
-                color: "#f5f4f1"
+                color: (FluTheme.darkMode === FluThemeType.Light) ? "#f5f4f1" : "#1c1c10"
                 radius: 30
             }
         }

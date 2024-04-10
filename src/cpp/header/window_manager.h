@@ -41,20 +41,6 @@ public slots:
         }
     }
 
-    void switchToWindow(const QString &targetAppName) {
-        QRegularExpression regex(targetAppName, QRegularExpression::CaseInsensitiveOption);
-        QList<QWindow *> windows = QGuiApplication::topLevelWindows();
-
-        for (QWindow *window : windows) {
-            qDebug() << window->title();
-            if (regex.match(window->title()).hasMatch()) {
-                window->show();
-                window->raise();
-                window->requestActivate();
-                return; // 停止查找
-            }
-        }
-    }
 
 private:
     int m_screenWidth;
@@ -69,7 +55,6 @@ private:
             m_screenWidth = 0;
             m_screenHeight = 0;
         }
-        qDebug() << m_screenHeight << " " << m_screenWidth;
     }
 };
 

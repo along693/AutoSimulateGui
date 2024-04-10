@@ -14,5 +14,6 @@
         <file alias="LightTheme.qml">src/styles/LightTheme.qml</file>
         <file alias="qmldir">src/styles/qmldir</file>
         <file alias="DarkTheme.qml">src/styles/DarkTheme.qml</file>
+        <file alias="HighlightText.qml">src/styles/HighlightText.qml</file>
     </qresource>
 </RCC>
