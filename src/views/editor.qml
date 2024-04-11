@@ -160,31 +160,6 @@ Item {
                 Component.onCompleted: {
                     editorModel.document = textArea.textDocument
                 }
-                property bool processing: false
-
-                function highlightKeywords(text, keywords) {
-                    var processedText = text;
-                    for (var i = 0; i < keywords.length; ++i) {
-                        var keyword = keywords[i];
-                        var keywordPattern = new RegExp("\\b" + keyword + "\\b", 'g'); // 使用单词边界确保只匹配整个关键字
-                        processedText = processedText.replace(keywordPattern, function(match) {
-                            return "<span style='color:#FF0000'>" + match + "</span>";
-                        });
-                    }
-                    return processedText;
-                }
-
-                // 实时应用高亮效果
-                onTextChanged: {
-                    if (!processing) {
-                        processing = true;
-                        var cursorPos = textArea.cursorPosition;
-                        var newText = highlightKeywords(textArea.text,["find", "locate", "click", "scroll", "drag", "capture", "delay", "write", "loop", "endloop"]);
-                        textArea.text = newText;
-                        textArea.cursorPosition = cursorPos;
-                        processing = false;
-                    }
-                }
             }
 
             ScrollBar.vertical: FluScrollBar {}
@@ -269,7 +244,7 @@ Item {
                                 iconSize: 20
                                 normalColor: FluTheme.darkMode === FluThemeType.Light ? LightTheme.color4 : DarkTheme.color4
                                 hoverColor: FluTheme.darkMode === FluThemeType.Light ? LightTheme.color1 : DarkTheme.color1
-                                onClicked: Executor.execute(Parser.parse(editorModel.text))
+                                onClicked: Executor.execute(Parser.parse(editorModel.text),0)
                             }
                         }
                     }

@@ -53,7 +53,6 @@ Item {
                 event.accepted = true;
             }
             if (event.key === Qt.Key_Enter) {
-                pdfView.scaleToWidth(parent.width, parent.height);
                 pdfView.searchForward();
             }
         }

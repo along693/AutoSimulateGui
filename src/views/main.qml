@@ -16,16 +16,6 @@ FluWindow {
     minimumHeight: 200
     fitsAppBarWindows: true
 
-
-    // FluAcrylic{
-        // target: nav_view
-        // width: nav_view.width - 100
-        // height: nav_view.height -100
-        // anchors.centerIn: nav_view
-        // tintOpacity: 1
-        // blurRadius: 1
-    // }
-
     FluObject{
         id: nav_left
         FluPaneItem{

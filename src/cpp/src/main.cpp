@@ -54,10 +54,10 @@ int main(int argc, char *argv[])
     main_controller.menuController()->newFileClicked(); //Create a new file to start with!
 
     WindowManager windowManager;
-    Screenshot screenshot;
+    Screenshot& screenshot = Screenshot::getInstance();
+    Clipboard& clipboard = Clipboard::getInstance();
     Parser parser;
     Executor executor;
-    Clipboard clipboard;
     LogController *logController = LogController::instance();
     FindApplication findApplication;
     AutoGuiTester autoGuiTester;
