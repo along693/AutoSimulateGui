@@ -198,7 +198,7 @@ Item {
                                 onClicked: mainController.menuController.newFileClicked();
                             }
                             FluIconButton{
-                                iconSource: FluentIcons.FolderOpen
+                                iconSource: FluentIcons.OpenFolderHorizontal
                                 iconSize: 20
                                 normalColor: FluTheme.darkMode === FluThemeType.Light ? LightTheme.color4 : DarkTheme.color4
                                 hoverColor: FluTheme.darkMode === FluThemeType.Light ? LightTheme.color1 : DarkTheme.color1
