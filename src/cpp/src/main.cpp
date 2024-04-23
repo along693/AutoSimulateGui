@@ -3,6 +3,7 @@
 #include <QQmlContext>
 #include <QQuickWindow>
 #include <QDebug>
+#include <QHotkey>
 
 #include "editor_controller.h"
 #include "navigation_controller.h"
@@ -22,10 +23,7 @@
 #include "log_controller.h"
 #include "clipboard.h"
 #include "line_numbers.h"
-#include "find_application.h"
 #include "mouse.h"
-#include "keyboard_listener.h"
-#include <QHotkey>
 
 int main(int argc, char *argv[])
 {
@@ -58,13 +56,12 @@ int main(int argc, char *argv[])
     main_controller.fileNavigationController()->setModel(file_navigation_model);
     main_controller.menuController()->newFileClicked(); //Create a new file to start with!
 
-    WindowManager windowManager;
+    WindowManager& windowManager = WindowManager::getInstance();
     Screenshot& screenshot = Screenshot::getInstance();
     Clipboard& clipboard = Clipboard::getInstance();
     Executor& executor = Executor::getInstance();
     LogController& logController = LogController::getInstance();
     Parser parser;
-    FindApplication findApplication;
     AutoGuiTester autoGuiTester;
     QHotkey *hotkey = new QHotkey(QKeySequence("Ctrl+i"), true);
     QObject::connect(hotkey, &QHotkey::activated, &executor, &Executor::onHotkeyActivated);
@@ -83,7 +80,6 @@ int main(int argc, char *argv[])
     engine.rootContext()->setContextProperty("Executor", &executor);
     engine.rootContext()->setContextProperty("Clipboard", &clipboard);
     engine.rootContext()->setContextProperty("LogController", &logController);
-    engine.rootContext()->setContextProperty("FindApplication", &findApplication);
     engine.rootContext()->setContextProperty("AutoGuiTester", &autoGuiTester);
 
 

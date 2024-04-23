@@ -29,11 +29,12 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
             src/cpp/src/clipboard.cpp
             src/cpp/header/line_numbers.h
             src/cpp/src/line_numbers.cpp
-            src/cpp/header/find_application.h
-            src/cpp/src/find_application.cpp
-            src/cpp/header/keyboard_listener.h
+
+
+
             D:/qtproj/QHotkey/QHotkey/qhotkey.cpp
             D:/qtproj/QHotkey/QHotkey/qhotkey_win.cpp
+            src/cpp/src/window_manager.cpp
         )
 else()
     if(ANDROID)

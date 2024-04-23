@@ -2,16 +2,15 @@
 #include "navigation_model.h"
 
 FileNavigationController::FileNavigationController(QObject *parent)
-        : QObject(parent), model_(nullptr)
-{}
+        : QObject(parent), model_(nullptr) {
 
-void FileNavigationController::setModel(FileNavigationModel &model)
-{
+}
+
+void FileNavigationController::setModel(FileNavigationModel &model) {
     model_ = &model;
 }
 
-int FileNavigationController::selectedIndex() const
-{
+int FileNavigationController::selectedIndex() const {
     if (!model_) {
         return -1;
     }
@@ -19,8 +18,7 @@ int FileNavigationController::selectedIndex() const
     return model_->selectedIndex();
 }
 
-void FileNavigationController::setSelectedIndex(int index)
-{
+void FileNavigationController::setSelectedIndex(int index) {
     if (!model_) {
         return;
     }
