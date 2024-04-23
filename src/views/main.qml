@@ -15,6 +15,28 @@ FluWindow {
     minimumWidth: 520
     minimumHeight: 200
     fitsAppBarWindows: true
+    FluContentDialog{
+        id: dialog_close
+        title: qsTr("Quit")
+        message: qsTr("Are you sure you want to exit the program?")
+        negativeText: qsTr("Minimize")
+        buttonFlags: FluContentDialogType.NegativeButton | FluContentDialogType.NeutralButton | FluContentDialogType.PositiveButton
+        onNegativeClicked: {
+            system_tray.showMessage(qsTr("Friendly Reminder"),qsTr("FluentUI is hidden from the tray, click on the tray to activate the window again"));
+            timer_window_hide_delay.restart()
+        }
+        positiveText: qsTr("Quit")
+        neutralText: qsTr("Cancel")
+        onPositiveClicked:{
+            FluRouter.exit(0)
+        }
+    }
+    appBar: FluAppBar {
+        width: window.width
+        height: 30
+        closeClickListener: ()=>{dialog_close.open()} // 在这里调用退出窗口的显示函数
+        z:7
+    }
 
     FluObject{
         id: nav_left
@@ -32,7 +54,6 @@ FluWindow {
         }
         FluPaneItem{
             icon: FluentIcons.Event12
-
             title: "event"
             url: "qrc:/src/views/event_edit.qml"
             onTap:{
@@ -46,7 +67,7 @@ FluWindow {
         FluPaneItem{
             icon: FluentIcons.Help
             title:"help"
-            url: "qrc:/src/views/add_event.qml"
+            url: "qrc:/src/views/test_drag.qml"
             onTap:{
                 nav_view.push(url)
             }
@@ -67,11 +88,8 @@ FluWindow {
                     FluTheme.darkMode = FluThemeType.Dark
                     theme.icon = FluentIcons.QuietHours
                 }
-
             }
-
         }
-
     }
 
     FluNavigationView{

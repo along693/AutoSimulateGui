@@ -41,6 +41,20 @@ public slots:
         }
     }
 
+    HWND getMainWindowHandle() {
+        QScreen *primaryScreen = QGuiApplication::primaryScreen();
+        if (primaryScreen) {
+            QWindowList windows = QGuiApplication::allWindows();
+            for (QWindow *window : windows) {
+                if (window->screen() == primaryScreen) {
+                    qDebug() << window->winId();
+                    return reinterpret_cast<HWND>(window->winId());
+                }
+            }
+        }
+        return nullptr;
+    }
+
 
 private:
     int m_screenWidth;

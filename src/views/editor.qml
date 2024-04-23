@@ -21,7 +21,7 @@ Item {
         Item {
             width: filenamePanel.width
             height: 25
-            FluButton {
+            FluTextButton {
                 id: button
                 checked: index === listView.currentIndex
                 checkable: true
@@ -76,7 +76,7 @@ Item {
             id: lineNumbersItem
             anchors.fill: parent
 
-            // selectedBackgroundColor: LightTheme.lineNumberSelectedBackgroundColor
+            // selectedBackgroundColr: LightTheme.lineNumberSelectedBackgroundColor
             selectedBackgroundColor: "#FFB9DDFF"
             // currentBackgroundColor: LightTheme.lineNumberCurrentBackgroundColor
             currentBackgroundColor: "#00619a"
@@ -211,10 +211,11 @@ Item {
                                 hoverColor: FluTheme.darkMode === FluThemeType.Light ? LightTheme.color1 : DarkTheme.color1
                                 // onClicked: saveDialog.open()
                                 onClicked: {
-                                    WindowManager.hideApplication();
-                                    FindApplication.switchToWindow("word");
-                                    AutoGuiTester.runTests()
-                                    WindowManager.showApplication();
+                                    // WindowManager.hideApplication();
+                                    // FindApplication.switchToWindow("word");
+                                    // AutoGuiTester.runTests()
+                                    // WindowManager.showApplication();
+                                    Executor.onHotkeyActivated();
                                 }
                             }
                             FluIconButton{
@@ -244,7 +245,11 @@ Item {
                                 iconSize: 20
                                 normalColor: FluTheme.darkMode === FluThemeType.Light ? LightTheme.color4 : DarkTheme.color4
                                 hoverColor: FluTheme.darkMode === FluThemeType.Light ? LightTheme.color1 : DarkTheme.color1
-                                onClicked: Executor.execute(Parser.parse(editorModel.text),0)
+                                onClicked: {
+                                    WindowManager.hideApplication();
+                                    Executor.startExecutionInBackground(Parser.parse(editorModel.text),0)
+                                    WindowManager.showApplication();
+                                }
                             }
                         }
                     }
@@ -292,7 +297,7 @@ Item {
                             font: LightTheme.logFont
                         }
                         Component.onCompleted: {
-                            LogController.addLog(LogController.Info, "This is an info message.");
+                            // LogController.addLog(LogController.Info, "This is an info message.");
                         }
                         onCountChanged: {
                             positionViewAtEnd();

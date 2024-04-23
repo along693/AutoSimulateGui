@@ -6,9 +6,10 @@
         <file alias="event_edit.qml">src/views/event_edit.qml</file>
         <file alias="screenshot.qml">src/views/screenshot.qml</file>
         <file alias="CusDragRect.qml">src/views/CusDragRect.qml</file>
-        <file alias="add_event.qml">src/views/add_event.qml</file>
+        <file alias="help.qml">src/views/help.qml</file>
         <file alias="App.qml">src/views/App.qml</file>
         <file alias="getCus.qml">src/views/getCus.qml</file>
+        <file alias="test_drag.qml">src/views/test_drag.qml</file>
     </qresource>
     <qresource prefix="/src/styles">
         <file alias="LightTheme.qml">src/styles/LightTheme.qml</file>

@@ -18,7 +18,7 @@ Item {
         Item {
             width: filenamePanel.width
             height: 25
-            FluButton {
+            FluTextButton {
                 id: button
                 checked: index === listView.currentIndex
                 checkable: true
@@ -27,9 +27,7 @@ Item {
                 ButtonGroup.group: openedFileButtonGroup
                 onClicked: mainController.fileNavigationController.fileOpenedClicked(fileId)
                 background: Rectangle {
-                    color: (FluTheme.darkMode === FluThemeType.Light) ?
-                        (button.checked ? LightTheme.color4 : "transparent") :
-                        (button.checked ? "#262c36" : "#1a1b1e")
+                    color: (FluTheme.darkMode === FluThemeType.Light) ? button.checked? LightTheme.color4 : "transparent" : button.checked? "#262c36" : "#1a1b1e"
                     radius: 10
                 }
             }
@@ -38,7 +36,7 @@ Item {
 
     FluRectangle {
         id: filenamePanel
-        anchors {
+        anchors{
             left: parent.left
             top: parent.top
             bottom: parent.bottom
@@ -48,7 +46,7 @@ Item {
         height: parent.height
         color: (FluTheme.darkMode === FluThemeType.Light) ? "#FFFFFF" : "#1a1b1e"
         clip: true
-        ListView {
+        ListView{
             id: listView
             anchors.fill: parent
             model: documentsModel
@@ -71,16 +69,74 @@ Item {
             var result = [];
             for (var i = 0; i < text.length; i++) {
                 if (text[i].trim() !== "") {
-                    result.push(text[i].trim());
+                    var newData = {
+                        title: text[i].trim(),
+                        key : i
+                    };
+                    result.push(newData);
                 }
             }
-            list_model.clear();
-            for (i = 0; i < result.length; i++) {
-                var word = result[i].split(" ");
-                var keyword = word[0];
-                var parameters = word.slice(1).join(" ");
-                list_model.append({lable: keyword, text: parameters});
-            }
+            tree_view.updateDataSource(result);
+        }
+    }
+
+    function updateHiddenText(text){
+        var newText = text.join('\n');
+        hiddenText.text = newText + '\n';
+    }
+
+    function getAllCommand() {
+        var allCommand = tree_view.getAllData();
+        var results = []
+        for (var i = 0; i < allCommand.length; i ++) {
+            results.push(allCommand[i].title);
+        }
+        return results
+    }
+
+    function handleItemClicked(index) {
+        var data = tree_view.getAllData();
+        var getTitle = data[index].title;
+        var command = getTitle.split(" ");
+        var keyword = command[0];
+        var parameters = command.slice(1);
+        keywordComboBox.currentIndex = parseCommandIndex(keyword);
+        if (parameters[0] !== undefined) {
+            parameter1.text = parameters[0];
+        }
+        if (parameters[1] !== undefined) {
+            parameter2.text = parameters[1];
+        }
+        if (parameters[2] !== undefined) {
+            parameter3.text = parameters[2];
+        }
+        if (parameters[3] !== undefined) {
+            parameter4.text = parameters[3];
+        }
+    }
+
+    function parseCommandIndex(command) {
+        switch (command) {
+            case "find":
+                return 0;
+            case "locate":
+                return 1;
+            case "click":
+                return 2;
+            case "scroll":
+                return 3;
+            case "drag":
+                return 4;
+            case "capture":
+                return 5;
+            case "delay":
+                return 6;
+            case "write":
+                return 7;
+            case "loop":
+                return 8;
+            case "endloop":
+                return 9;
         }
     }
 
@@ -90,27 +146,75 @@ Item {
         parameter3.clear();
         parameter4.clear();
     }
-
-    FluScrollablePage {
-        id: event_timeline
+    function countEmptyInput() {
+        var count = 0;
+        if (parameter1.text === '') {
+            count += 1;
+        }
+        if (parameter2.text === '') {
+            count += 1;
+        }
+        if (parameter3.text === '') {
+            count += 1;
+        }
+        if (parameter4.text === '') {
+            count += 1;
+        }
+    }
+    FluTreeView{
+        id: tree_view
         anchors {
             top: parent.top
             bottom: parent.bottom
             left: filenamePanel.right
         }
         width: parent.width * 0.7
-        ListModel {
-            id: list_model
+        cellHeight: 30
+        draggable: true
+        showLine: true
+        checkable:false
+        depthPadding: 30
+        Component.onCompleted: {
+            tree_view.itemClicked.connect(handleItemClicked);
         }
-        FluTimeline {
-            Layout.fillWidth: true
-            Layout.topMargin: 20
-            Layout.bottomMargin: 20
-            width: parent.width
-            model: list_model
-            mode: FluTimelineType.Left
+        function appendRow(title) {
+            var newData = { title: title, key: title };
+            var currentData = tree_view.dataSource;
+            currentData.push(newData);
+            tree_view.dataSource = currentData;
+        }
+        function updateDataSource(newDataSource) {
+            tree_view.dataSource = newDataSource;
+        }
+
+        function getAllTitle() {
+            var allData = tree_view.getAllData();
+            for (var i = 0; i < allData.length; i ++) {
+                print(allData[i].title);
+            }
         }
     }
+
+    // FluScrollablePage {
+        // id: tree_view
+        // anchors {
+            // top: parent.top
+            // bottom: parent.bottom
+            // left: filenamePanel.right
+        // }
+        // width: parent.width * 0.7
+        // ListModel {
+            // id: list_model
+        // }
+        // FluTimeline {
+            // Layout.fillWidth: true
+            // Layout.topMargin: 20
+            // Layout.bottomMargin: 20
+            // width: parent.width
+            // model: list_model
+            // mode: FluTimelineType.Left
+        // }
+    // }
 
     FileDialog {
         id: openDialog
@@ -161,11 +265,11 @@ Item {
     Rectangle {
         id: rightPanel
         anchors {
-            left: event_timeline.right
+            left: tree_view.right
             top: parent.top
             bottom: parent.bottom
         }
-        width: parent.width - event_timeline.width
+        width: parent.width - tree_view.width
         height: parent.height
         color: (FluTheme.darkMode === FluThemeType.Light) ? "#ffffff" : "#1c1c10"
 
@@ -207,7 +311,12 @@ Item {
                             iconSize: 20
                             normalColor: FluTheme.darkMode === FluThemeType.Light ? LightTheme.color4 : DarkTheme.color4
                             hoverColor: FluTheme.darkMode === FluThemeType.Light ? LightTheme.color1 : DarkTheme.color1
-                            onClicked: Executor.execute(Parser.parse(editorModel.text))
+                            onClicked:
+                            {
+                                WindowManager.hideApplication();
+                                Executor.execute(Parser.parse(editorModel.text),0)
+                                WindowManager.showApplication();
+                            }
                         }
                     }
                     Rectangle {
@@ -238,7 +347,7 @@ Item {
                             clearInput()
                         }
                     }
-                    FluViewModel {
+                    QtObject {
                         id: viewModel
                         property string text1
                         property string text2
@@ -247,6 +356,7 @@ Item {
                     }
                     FluTextBox {
                         id: parameter1
+                        width: rightPanel.width
                         placeholderText: "Parameter 1"
                         visible: keywordComboBox.model.get(keywordComboBox.currentIndex).parameterCount > 0
                         text: viewModel.text1
@@ -256,6 +366,7 @@ Item {
                     }
                     FluTextBox {
                         id: parameter2
+                        width: rightPanel.width
                         placeholderText: "Parameter 2"
                         visible: keywordComboBox.model.get(keywordComboBox.currentIndex).parameterCount > 1
                         text: viewModel.text2
@@ -265,6 +376,7 @@ Item {
                     }
                     FluTextBox {
                         id: parameter3
+                        width: rightPanel.width
                         placeholderText: "Parameter 3"
                         visible: keywordComboBox.model.get(keywordComboBox.currentIndex).parameterCount > 2
                         text: viewModel.text3
@@ -274,6 +386,7 @@ Item {
                     }
                     FluTextBox {
                         id: parameter4
+                        width: rightPanel.width
                         placeholderText: "Parameter 4"
                         visible: keywordComboBox.model.get(keywordComboBox.currentIndex).parameterCount > 3
                         text: viewModel.text4
@@ -292,16 +405,47 @@ Item {
                             text: qsTr("Append")
                             onClicked: {
                                 if (keywordComboBox.currentIndex === -1) {
-                                    console.log("Please select a keyword.")
+                                    showWarning("Please select a keyword.")
                                     return
                                 }
+                                if (countEmptyInput() < keywordComboBox.model.get(keywordComboBox.currentIndex).parameterCount) {
+                                    showWarning("Miss Parameter.")
+                                    return
+                                }
+
                                 var keyword = keywordComboBox.model.get(keywordComboBox.currentIndex).text;
                                 var parameters = [parameter1.text, parameter2.text, parameter3.text, parameter4.text];
                                 var parameterString = parameters.join(" ");
-                                console.log("keyword:", keywordComboBox.model.get(keywordComboBox.currentIndex).text);
-                                console.log("Parameters:", parameterString);
-                                hiddenText.text += keyword + " " + parameterString + '\n';
+                                var command =  keyword + " " + parameterString ;
+                                updateHiddenText(getAllCommand());
+                                hiddenText.text += command + '\n';
                                 clearInput();
+                                tree_view.scrollToLastRow();
+                            }
+                        }
+                        FluFilledButton {
+                            text: qsTr("Modify")
+                            onClicked: {
+                                var currentIndex = tree_view.getCurrentClickedItemIndex();
+                                if (currentIndex === -1) {
+                                    showWarning("Do not select a command");
+                                    return;
+                                }
+                                if (countEmptyInput() < keywordComboBox.model.get(keywordComboBox.currentIndex).parameterCount) {
+                                    showWarning("Miss Parameter.")
+                                    return
+                                }
+                                updateHiddenText(getAllCommand())
+                                var keyword = keywordComboBox.model.get(keywordComboBox.currentIndex).text;
+                                var parameters = [parameter1.text, parameter2.text, parameter3.text, parameter4.text];
+                                var parameterString = parameters.join(" ");
+                                var command =  keyword + " " + parameterString ;
+                                var allCommand = hiddenText.text.split('\n');
+                                allCommand[currentIndex] = command;
+                                updateHiddenText(allCommand);
+                                // hiddenText.text += command + '\n';
+                                clearInput();
+                                tree_view.scrollToLastRow();
                             }
                         }
                         FluIconButton {
@@ -313,6 +457,28 @@ Item {
                             onClicked: {
                                 getFileNameDialog.open();
                             }
+                        }
+                        FluIconButton{
+                            iconSource: FluentIcons.Click
+                            iconSize: 15
+                            normalColor: FluTheme.darkMode === FluThemeType.Light ? LightTheme.color4 : DarkTheme.color4
+                            hoverColor: FluTheme.darkMode === FluThemeType.Light ? LightTheme.color1 : DarkTheme.color1
+                            visible: keywordComboBox.model.get(keywordComboBox.currentIndex).text === "click"
+                            onClicked:{
+                                WindowManager.hideApplication()
+                                getCusCom.source = "getCus.qml";
+                                var result = Clipboard.readText().split(" ");
+                                parameter1.text = result[0];
+                                parameter2.text = result[1];
+                            }
+                        }
+                    }
+                    Loader{
+                        id: getCusCom
+                        onLoaded: {
+                            item.closing.connect(function (){
+                                getCusCom.source = "";
+                            });
                         }
                     }
                 }

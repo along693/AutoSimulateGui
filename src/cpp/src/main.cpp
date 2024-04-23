@@ -1,6 +1,7 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
+#include <QQuickWindow>
 #include <QDebug>
 
 #include "editor_controller.h"
@@ -23,11 +24,17 @@
 #include "line_numbers.h"
 #include "find_application.h"
 #include "mouse.h"
+#include "keyboard_listener.h"
+#include <QHotkey>
 
 int main(int argc, char *argv[])
 {
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
+#endif
+
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+    QQuickWindow::setGraphicsApi(QSGRendererInterface::OpenGL);
 #endif
     QGuiApplication app(argc, argv);
     qmlRegisterType<MainController>("Editor", 1, 0, "MainController");
@@ -35,7 +42,6 @@ int main(int argc, char *argv[])
     qmlRegisterType<FileNavigationController>("Editor", 1, 0, "FileNavigationController");
     qmlRegisterType<DocumentHandler>("Editor", 1, 0, "DocumentHandler");
     qmlRegisterType<LineNumbers>("Editor", 1, 0, "LineNumbers");
-
 
 
     MainController main_controller;
@@ -50,18 +56,19 @@ int main(int argc, char *argv[])
 
     FileNavigationModel file_navigation_model;
     main_controller.fileNavigationController()->setModel(file_navigation_model);
-
     main_controller.menuController()->newFileClicked(); //Create a new file to start with!
 
     WindowManager windowManager;
     Screenshot& screenshot = Screenshot::getInstance();
     Clipboard& clipboard = Clipboard::getInstance();
+    Executor& executor = Executor::getInstance();
+    LogController& logController = LogController::getInstance();
     Parser parser;
-    Executor executor;
-    LogController *logController = LogController::instance();
     FindApplication findApplication;
     AutoGuiTester autoGuiTester;
-
+    QHotkey *hotkey = new QHotkey(QKeySequence("Ctrl+i"), true);
+    QObject::connect(hotkey, &QHotkey::activated, &executor, &Executor::onHotkeyActivated);
+    qDebug() << "register";
 
 
     QQmlApplicationEngine engine;
@@ -75,7 +82,7 @@ int main(int argc, char *argv[])
     engine.rootContext()->setContextProperty("Parser", &parser);
     engine.rootContext()->setContextProperty("Executor", &executor);
     engine.rootContext()->setContextProperty("Clipboard", &clipboard);
-    engine.rootContext()->setContextProperty("LogController", logController);
+    engine.rootContext()->setContextProperty("LogController", &logController);
     engine.rootContext()->setContextProperty("FindApplication", &findApplication);
     engine.rootContext()->setContextProperty("AutoGuiTester", &autoGuiTester);
 
