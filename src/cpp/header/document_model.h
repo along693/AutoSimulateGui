@@ -1,19 +1,15 @@
 #pragma once
-
 #include <QAbstractListModel>
 #include <QUrl>
-
 #include <memory>
 #include <unordered_map>
 #include <utility>
-
 #include "document_handler.h"
 
 class DocumentsModel : public QAbstractListModel
 {
 Q_OBJECT
     Q_DISABLE_COPY_MOVE(DocumentsModel)
-
 public:
     enum DocumentsRoles {
         FileIdRole = Qt::UserRole + 1,

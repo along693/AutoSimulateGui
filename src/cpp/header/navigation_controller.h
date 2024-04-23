@@ -3,7 +3,6 @@
 #include <QObject>
 
 class FileNavigationModel;
-
 class FileNavigationController : public QObject
 {
 Q_OBJECT

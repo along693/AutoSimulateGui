@@ -246,9 +246,7 @@ Item {
                                 normalColor: FluTheme.darkMode === FluThemeType.Light ? LightTheme.color4 : DarkTheme.color4
                                 hoverColor: FluTheme.darkMode === FluThemeType.Light ? LightTheme.color1 : DarkTheme.color1
                                 onClicked: {
-                                    WindowManager.hideApplication();
                                     Executor.startExecutionInBackground(Parser.parse(editorModel.text),0)
-                                    WindowManager.showApplication();
                                 }
                             }
                         }

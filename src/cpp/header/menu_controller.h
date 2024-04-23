@@ -3,7 +3,6 @@
 #include <QObject>
 
 class QUrl;
-
 class MenuModel;
 class DocumentHandler;
 

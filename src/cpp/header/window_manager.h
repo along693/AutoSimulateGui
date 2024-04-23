@@ -11,6 +11,7 @@
 
 class WindowManager : public QObject {
     Q_OBJECT
+
 public:
     static WindowManager& getInstance();
     Q_INVOKABLE QStringList getAllWindowTitles();
@@ -20,7 +21,6 @@ public:
 
 private:
     explicit WindowManager(QObject *parent = nullptr);
-
     static WindowManager instance;
 };
 

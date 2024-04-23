@@ -22,7 +22,7 @@ void EditorModel::setText(const QString &text)
         return;
     }
 
-    { // Only block signals in scope
+    {
         QSignalBlocker block_signals{this};
         text_document_->setPlainText(text);
     }

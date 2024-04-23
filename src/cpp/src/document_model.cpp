@@ -167,7 +167,6 @@ QModelIndex DocumentsModel::indexForId(const int id) const
         }
     }
 
-    //Not found
     if (i == data_.size()) {
         return QModelIndex{};
     }

@@ -54,7 +54,7 @@ int main(int argc, char *argv[])
 
     FileNavigationModel file_navigation_model;
     main_controller.fileNavigationController()->setModel(file_navigation_model);
-    main_controller.menuController()->newFileClicked(); //Create a new file to start with!
+    main_controller.menuController()->newFileClicked();
 
     WindowManager& windowManager = WindowManager::getInstance();
     Screenshot& screenshot = Screenshot::getInstance();
@@ -65,7 +65,6 @@ int main(int argc, char *argv[])
     AutoGuiTester autoGuiTester;
     QHotkey *hotkey = new QHotkey(QKeySequence("Ctrl+i"), true);
     QObject::connect(hotkey, &QHotkey::activated, &executor, &Executor::onHotkeyActivated);
-    qDebug() << "register";
 
 
     QQmlApplicationEngine engine;

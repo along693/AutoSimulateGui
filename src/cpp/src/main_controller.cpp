@@ -1,8 +1,6 @@
 #include "main_controller.h"
-
 #include "editor_controller.h"
 #include "navigation_controller.h"
-
 #include "document_model.h"
 
 MainController::MainController(QObject *parent)

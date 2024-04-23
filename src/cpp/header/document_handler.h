@@ -32,12 +32,9 @@ public:
     QUrl fileUrl() const;
     QString textContent() const;
     int id() const;
-
     bool needsUpdating() const;
     void setNeedsUpdating(bool needs_updating);
-
     bool needsSaving() const;
-
     bool isNewFile() const;
 
 public Q_SLOTS:
