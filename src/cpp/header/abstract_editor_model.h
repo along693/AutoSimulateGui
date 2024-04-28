@@ -2,14 +2,11 @@
 
 #include <QObject>
 #include <QString>
-#include <QtCore/qglobal.h>
+#include <QTextDocument>
 
-class QTextDocument;
 
-class AbstractEditorModel : public QObject
-{
-Q_OBJECT
-    Q_DISABLE_COPY_MOVE(AbstractEditorModel)
+class AbstractEditorModel : public QObject {
+    Q_OBJECT
 
     Q_PROPERTY(QString text READ text WRITE setText NOTIFY textReplaced)
     Q_PROPERTY(int id READ id WRITE setId NOTIFY idChanged)
@@ -29,6 +26,6 @@ Q_SIGNALS:
     void idChanged();
 
 private:
-    int id_{0};
+    int id_ = 0;
 };
 

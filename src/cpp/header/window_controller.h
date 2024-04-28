@@ -1,5 +1,4 @@
-#ifndef WINDOWMANAGER_H
-#define WINDOWMANAGER_H
+#pragma once
 
 #include <QObject>
 #include <QGuiApplication>
@@ -9,20 +8,17 @@
 #include <QRegularExpression>
 #include <windows.h>
 
-class WindowManager : public QObject {
+class WindowController : public QObject {
     Q_OBJECT
 
 public:
-    static WindowManager& getInstance();
+    static WindowController& getInstance();
     Q_INVOKABLE QStringList getAllWindowTitles();
     Q_INVOKABLE bool switchToWindow(const QString &targetAppName);
     Q_INVOKABLE void hideApplication();
     Q_INVOKABLE void showApplication();
 
 private:
-    explicit WindowManager(QObject *parent = nullptr);
-    static WindowManager instance;
+    explicit WindowController(QObject *parent = nullptr);
+    static WindowController instance;
 };
-
-#endif // WINDOWMANAGER_H
-

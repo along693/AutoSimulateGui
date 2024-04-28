@@ -9,7 +9,7 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Core Quick Widgets) # 添加 Widgets 组件
+find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Core Quick Widgets)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core Quick Widgets Concurrent)
 find_package(OpenCV REQUIRED)
 
@@ -23,18 +23,8 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
             ${PROJECT_HEADERS}
             ${PROJECT_SOURCES}
             qml.qrc
-            src/cpp/header/log_controller.h
-            src/cpp/src/log_controller.cpp
-            src/cpp/header/clipboard.h
-            src/cpp/src/clipboard.cpp
-            src/cpp/header/line_numbers.h
-            src/cpp/src/line_numbers.cpp
-
-
-
             D:/qtproj/QHotkey/QHotkey/qhotkey.cpp
             D:/qtproj/QHotkey/QHotkey/qhotkey_win.cpp
-            src/cpp/src/window_manager.cpp
         )
 else()
     if(ANDROID)

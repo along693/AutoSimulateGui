@@ -175,7 +175,7 @@ Item {
             }
             color: (FluTheme.darkMode === FluThemeType.Light) ? "#ffffff" : "#1c1c10"
 
-            width: (parent.width - lineNumberPanel.width - filenamePanel.width) / 5
+            width: (parent.width - lineNumberPanel.width - filenamePanel.width) / 5 + 5
             height: parent.height
 
             Column {
@@ -209,24 +209,14 @@ Item {
                                 iconSize: 20
                                 normalColor: FluTheme.darkMode === FluThemeType.Light ? LightTheme.color4 : DarkTheme.color4
                                 hoverColor: FluTheme.darkMode === FluThemeType.Light ? LightTheme.color1 : DarkTheme.color1
-                                // onClicked: saveDialog.open()
-                                onClicked: {
-                                    // WindowManager.hideApplication();
-                                    // FindApplication.switchToWindow("word");
-                                    // AutoGuiTester.runTests()
-                                    // WindowManager.showApplication();
-                                    Executor.onHotkeyActivated();
-                                }
+                                onClicked: saveDialog.open()
                             }
                             FluIconButton{
-                                iconSource: FluentIcons.Click
+                                iconSource: FluentIcons.Play
                                 iconSize: 20
                                 normalColor: FluTheme.darkMode === FluThemeType.Light ? LightTheme.color4 : DarkTheme.color4
                                 hoverColor: FluTheme.darkMode === FluThemeType.Light ? LightTheme.color1 : DarkTheme.color1
-                                onClicked:{
-                                    WindowManager.hideApplication()
-                                    getCusCom.source = "getCus.qml";
-                                }
+                                onClicked:  mainController.menuController.executeClicked(editorModel.text);
                             }
                         }
                         Row{
@@ -236,35 +226,20 @@ Item {
                                 normalColor: FluTheme.darkMode === FluThemeType.Light ? LightTheme.color4 : DarkTheme.color4
                                 hoverColor: FluTheme.darkMode === FluThemeType.Light ? LightTheme.color1 : DarkTheme.color1
                                 onClicked: {
-                                    WindowManager.hideApplication();
-                                    screenShotCom.source = "screenshot.qml";
+                                    mainController.windowController.hideApplication()
+                                    FluRouter.navigate("/screenshot")
                                 }
                             }
                             FluIconButton{
-                                iconSource: FluentIcons.Play
+                                iconSource: FluentIcons.Click
                                 iconSize: 20
                                 normalColor: FluTheme.darkMode === FluThemeType.Light ? LightTheme.color4 : DarkTheme.color4
                                 hoverColor: FluTheme.darkMode === FluThemeType.Light ? LightTheme.color1 : DarkTheme.color1
-                                onClicked: {
-                                    Executor.startExecutionInBackground(Parser.parse(editorModel.text),0)
+                                onClicked:{
+                                    mainController.windowController.hideApplication()
+                                    FluRouter.navigate("/mouse_coord_tracker")
                                 }
                             }
-                        }
-                    }
-                    Loader{
-                        id: screenShotCom
-                        onLoaded: {
-                            item.closing.connect(function (){
-                                screenShotCom.source = "";
-                            });
-                        }
-                    }
-                    Loader{
-                        id: getCusCom
-                        onLoaded: {
-                            item.closing.connect(function (){
-                                getCusCom.source = "";
-                            });
                         }
                     }
                 }
@@ -286,16 +261,13 @@ Item {
                     ListView {
                         id: logView
                         anchors.fill: parent
-                        model: LogController.logs
+                        model: mainController.logController.logs
 
                         delegate: FluText {
                             text: modelData
                             width: rightPanel.width
                             wrapMode: Text.WrapAnywhere
                             font: LightTheme.logFont
-                        }
-                        Component.onCompleted: {
-                            // LogController.addLog(LogController.Info, "This is an info message.");
                         }
                         onCountChanged: {
                             positionViewAtEnd();

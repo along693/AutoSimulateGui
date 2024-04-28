@@ -6,6 +6,8 @@
 #include "editor_controller.h"
 #include "navigation_controller.h"
 #include "menu_controller.h"
+#include "window_controller.h"
+#include "log_controller.h"
 
 class DocumentsModel;
 
@@ -17,6 +19,8 @@ Q_OBJECT
     Q_PROPERTY(MenuController *menuController READ menuController CONSTANT)
     Q_PROPERTY(EditorController *editorController READ editorController CONSTANT)
     Q_PROPERTY(FileNavigationController *fileNavigationController READ fileNavigationController CONSTANT)
+    Q_PROPERTY(WindowController *windowController READ windowController CONSTANT)
+    Q_PROPERTY(LogController *logController READ logController CONSTANT)
 
 public:
     explicit MainController(QObject *parent = nullptr);
@@ -26,6 +30,8 @@ public:
     MenuController *menuController();
     EditorController *editorController();
     FileNavigationController *fileNavigationController();
+    WindowController* windowController();
+    LogController* logController();
 
 private:
     void storeTextToCurrentFile();
@@ -33,6 +39,8 @@ private:
     MenuController menu_controller_;
     EditorController editor_controller_;
     FileNavigationController file_navigation_controller_;
+    WindowController& window_controller_ = WindowController::getInstance();
+    LogController& log_controller_ = LogController::getInstance();
     DocumentsModel *documents_model_{nullptr};
     QMetaObject::Connection document_created_connection_;
 
@@ -44,5 +52,6 @@ private Q_SLOTS:
     void handleNewFileClicked();
     void handleOpenedFileClicked(int id);
     void handleOpenFileClicked(const QUrl &url);
+    void handleExecuteClicked(const QString &text);
 };
 

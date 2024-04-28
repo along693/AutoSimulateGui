@@ -7,7 +7,6 @@ import Qt.labs.platform
 
 
 FluWindow {
-
     id:window
     visible: true
     width: 960
@@ -18,13 +17,9 @@ FluWindow {
     FluContentDialog{
         id: dialog_close
         title: qsTr("Quit")
-        message: qsTr("Are you sure you want to exit the program?")
+        message: qsTr("Are you sure you want to exit?")
         negativeText: qsTr("Minimize")
         buttonFlags: FluContentDialogType.NegativeButton | FluContentDialogType.NeutralButton | FluContentDialogType.PositiveButton
-        onNegativeClicked: {
-            system_tray.showMessage(qsTr("Friendly Reminder"),qsTr("FluentUI is hidden from the tray, click on the tray to activate the window again"));
-            timer_window_hide_delay.restart()
-        }
         positiveText: qsTr("Quit")
         neutralText: qsTr("Cancel")
         onPositiveClicked:{
@@ -34,8 +29,17 @@ FluWindow {
     appBar: FluAppBar {
         width: window.width
         height: 30
-        closeClickListener: ()=>{dialog_close.open()} // 在这里调用退出窗口的显示函数
+        showDark: true
+        darkClickListener:(button)=>handleDarkChanged(button)
+        closeClickListener: ()=>{dialog_close.open()}
         z:7
+    }
+    function handleDarkChanged() {
+        if(FluTheme.dark){
+            FluTheme.darkMode = FluThemeType.Light
+        }else{
+            FluTheme.darkMode = FluThemeType.Dark
+        }
     }
 
     FluObject{
@@ -45,7 +49,7 @@ FluWindow {
             icon: FluentIcons.Edit
             count: 9
             title:"Edit"
-            url: "qrc:/src/views/editor.qml"
+            url: "qrc:/src/views/code_editor.qml"
             onTap:{
 
                 nav_view.push(url)
@@ -55,7 +59,7 @@ FluWindow {
         FluPaneItem{
             icon: FluentIcons.Event12
             title: "event"
-            url: "qrc:/src/views/event_edit.qml"
+            url: "qrc:/src/views/event_editor.qml"
             onTap:{
                 nav_view.push(url)
             }
@@ -67,7 +71,7 @@ FluWindow {
         FluPaneItem{
             icon: FluentIcons.Help
             title:"help"
-            url: "qrc:/src/views/test_drag.qml"
+            url: "qrc:/src/views/help.qml"
             onTap:{
                 nav_view.push(url)
             }
@@ -97,14 +101,15 @@ FluWindow {
         id:nav_view
         width: parent.width
         height: parent.height
+        logo: "qrc:/src/views/favicon.ico"
         displayMode: FluNavigationViewType.Compact
         z:999
         pageMode: FluNavigationViewType.NoStack
         items:nav_left
-        footerItems:nav_footer
+        // footerItems:nav_footer
         Component.onCompleted: {
             nav_view.setCurrentIndex(0)
-            nav_view.push("qrc:/src/views/editor.qml")
+            nav_view.push("qrc:/src/views/code_editor.qml")
         }
     }
 }

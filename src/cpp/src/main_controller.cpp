@@ -2,6 +2,8 @@
 #include "editor_controller.h"
 #include "navigation_controller.h"
 #include "document_model.h"
+#include "parser.h"
+#include "executor.h"
 
 MainController::MainController(QObject *parent)
         : QObject{parent}
@@ -18,6 +20,10 @@ MainController::MainController(QObject *parent)
             &MenuController::saveAsFileClicked,
             this,
             &MainController::handleSaveAsFileClicked);
+    connect(&menu_controller_,
+            &MenuController::executeClicked,
+            this,
+            &MainController::handleExecuteClicked);
     connect(&menu_controller_,
             &MenuController::newFileClicked,
             this,
@@ -55,6 +61,16 @@ EditorController *MainController::editorController()
 FileNavigationController *MainController::fileNavigationController()
 {
     return &file_navigation_controller_;
+}
+
+WindowController *MainController::windowController()
+{
+    return &window_controller_;
+}
+
+LogController *MainController::logController()
+{
+    return &log_controller_;
 }
 
 void MainController::handleEditorTextChanged()
@@ -103,6 +119,17 @@ void MainController::handleSaveAsFileClicked(const QUrl &url)
     documents_model_->saveAs(current_file_id, url);
 }
 
+void MainController::handleExecuteClicked(const QString &text) {
+    if (!documents_model_) {
+        return;
+    }
+    storeTextToCurrentFile();
+    Parser parser;
+    Executor& executor = Executor::getInstance();
+    executor.startExecutionInBackground(parser.parse(text), 0);
+
+}
+
 void MainController::handleNewFileClicked()
 {
     if (!documents_model_) {
@@ -124,9 +151,7 @@ void MainController::handleOpenedFileClicked(const int id)
         return;
     }
 
-    //First set the file content
     storeTextToCurrentFile();
-    //Then open
     openDocument(id);
 }
 

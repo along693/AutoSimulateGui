@@ -11,7 +11,7 @@ Item {
 
     PdfDocument {
         id: doc
-        source: "file:///C:/Users/long/Desktop/LanguageDescription/Description.pdf"
+        source: "qrc:/doc/document.pdf"
     }
     TreeView {
         id: bookmarksTree

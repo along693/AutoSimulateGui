@@ -12,6 +12,18 @@ Item {
     ButtonGroup {
         id: openedFileButtonGroup
     }
+    Connections {
+        target: clipboard
+        function onSendFilePath(path) {
+            parameter1.text = path
+        }
+        function onSendMouseCoord(Coord) {
+            var result = Coord.split(" ");
+            parameter1.text = result[0];
+            parameter2.text = result[1];
+        }
+    }
+
 
     Component {
         id: openedFilesDelegate
@@ -168,7 +180,7 @@ Item {
             bottom: parent.bottom
             left: filenamePanel.right
         }
-        width: parent.width * 0.7
+        width: parent.width * 0.71
         cellHeight: 30
         draggable: true
         showLine: true
@@ -194,27 +206,6 @@ Item {
             }
         }
     }
-
-    // FluScrollablePage {
-        // id: tree_view
-        // anchors {
-            // top: parent.top
-            // bottom: parent.bottom
-            // left: filenamePanel.right
-        // }
-        // width: parent.width * 0.7
-        // ListModel {
-            // id: list_model
-        // }
-        // FluTimeline {
-            // Layout.fillWidth: true
-            // Layout.topMargin: 20
-            // Layout.bottomMargin: 20
-            // width: parent.width
-            // model: list_model
-            // mode: FluTimelineType.Left
-        // }
-    // }
 
     FileDialog {
         id: openDialog
@@ -280,7 +271,7 @@ Item {
             Rectangle {
                 id: actionPanel
                 width: rightPanel.width
-                height: rightPanel.height / 2
+                height: rightPanel.height / 5 * 2
                 color: (FluTheme.darkMode === FluThemeType.Light) ? "#f5f4f1" : "#1c1c10"
                 radius: 30
                 Column {
@@ -311,12 +302,7 @@ Item {
                             iconSize: 20
                             normalColor: FluTheme.darkMode === FluThemeType.Light ? LightTheme.color4 : DarkTheme.color4
                             hoverColor: FluTheme.darkMode === FluThemeType.Light ? LightTheme.color1 : DarkTheme.color1
-                            onClicked:
-                            {
-                                WindowManager.hideApplication();
-                                Executor.execute(Parser.parse(editorModel.text),0)
-                                WindowManager.showApplication();
-                            }
+                            onClicked:  mainController.menuController.executeClicked(editorModel.text);
                         }
                     }
                     Rectangle {
@@ -443,9 +429,7 @@ Item {
                                 var allCommand = hiddenText.text.split('\n');
                                 allCommand[currentIndex] = command;
                                 updateHiddenText(allCommand);
-                                // hiddenText.text += command + '\n';
                                 clearInput();
-                                tree_view.scrollToLastRow();
                             }
                         }
                         FluIconButton {
@@ -458,6 +442,17 @@ Item {
                                 getFileNameDialog.open();
                             }
                         }
+                        FluIconButton {
+                            iconSource: FluentIcons.Add
+                            iconSize: 15
+                            normalColor: FluTheme.darkMode === FluThemeType.Light ? LightTheme.color4 : DarkTheme.color4
+                            hoverColor: FluTheme.darkMode === FluThemeType.Light ? LightTheme.color1 : DarkTheme.color1
+                            visible: keywordComboBox.model.get(keywordComboBox.currentIndex).text === "locate"
+                            onClicked: {
+                                mainController.windowController.hideApplication()
+                                FluRouter.navigate("/screenshot")
+                            }
+                        }
                         FluIconButton{
                             iconSource: FluentIcons.Click
                             iconSize: 15
@@ -465,20 +460,9 @@ Item {
                             hoverColor: FluTheme.darkMode === FluThemeType.Light ? LightTheme.color1 : DarkTheme.color1
                             visible: keywordComboBox.model.get(keywordComboBox.currentIndex).text === "click"
                             onClicked:{
-                                WindowManager.hideApplication()
-                                getCusCom.source = "getCus.qml";
-                                var result = Clipboard.readText().split(" ");
-                                parameter1.text = result[0];
-                                parameter2.text = result[1];
+                                mainController.windowController.hideApplication()
+                                FluRouter.navigate("/mouse_coord_tracker")
                             }
-                        }
-                    }
-                    Loader{
-                        id: getCusCom
-                        onLoaded: {
-                            item.closing.connect(function (){
-                                getCusCom.source = "";
-                            });
                         }
                     }
                 }
@@ -486,15 +470,31 @@ Item {
             Rectangle {
                 id: splitLine
                 width: rightPanel.width
-                height: 5
+                height: rightPanel.height / 5
                 color: (FluTheme.darkMode === FluThemeType.Light) ? "#FFFFFF" : "#1a1a1a"
             }
             Rectangle {
                 id: logPanel
                 width: rightPanel.width
-                height: rightPanel.height / 2
+                height: rightPanel.height / 5 * 2
                 color: (FluTheme.darkMode === FluThemeType.Light) ? "#f5f4f1" : "#1c1c10"
                 radius: 30
+                clip: true
+                ListView {
+                    id: logView
+                    anchors.fill: parent
+                    model: mainController.logController.logs
+
+                    delegate: FluText {
+                        text: modelData
+                        width: rightPanel.width
+                        wrapMode: Text.WrapAnywhere
+                        font: LightTheme.logFont
+                    }
+                    onCountChanged: {
+                        positionViewAtEnd();
+                    }
+                }
             }
         }
     }

@@ -7,11 +7,13 @@ import FluentUI
 FluLauncher {
     id: app
     Component.onCompleted: {
+        FluApp.windowIcon = "qrc:/src/views/favicon.ico"
         FluApp.init(app)
         FluTheme.enableAnimation = true
         FluRouter.routes = {
             "/":"qrc:/src/views/main.qml",
-            "/add_event":"qrc:/src/views/add_event.qml",
+            "/mouse_coord_tracker":"qrc:/src/views/mouse_coord_tracker.qml",
+            "/screenshot":"qrc:/src/views/screenshot.qml",
         }
         FluRouter.navigate("/")
     }

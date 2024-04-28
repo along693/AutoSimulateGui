@@ -22,6 +22,7 @@ Q_SIGNALS:
     void openFileClicked(const QUrl &file_url);
     void saveFileClicked();
     void saveAsFileClicked(const QUrl &file_url);
+    void executeClicked(const QString& text);
 
 private:
     MenuModel *model_{nullptr};

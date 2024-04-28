@@ -15,7 +15,7 @@
 #include "navigation_model.h"
 #include "menu_model.h"
 #include "qml_editor_model.h"
-#include "window_manager.h"
+#include "window_controller.h"
 #include "screenshot.h"
 #include "autogui_test.h"
 #include "parser.h"
@@ -31,10 +31,8 @@ int main(int argc, char *argv[])
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 #endif
 
-#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
-    QQuickWindow::setGraphicsApi(QSGRendererInterface::OpenGL);
-#endif
     QGuiApplication app(argc, argv);
+    app.setWindowIcon(QIcon(":/src/views/favicon.ico"));
     qmlRegisterType<MainController>("Editor", 1, 0, "MainController");
     qmlRegisterType<MenuController>("Editor", 1, 0, "MenuController");
     qmlRegisterType<FileNavigationController>("Editor", 1, 0, "FileNavigationController");
@@ -56,15 +54,9 @@ int main(int argc, char *argv[])
     main_controller.fileNavigationController()->setModel(file_navigation_model);
     main_controller.menuController()->newFileClicked();
 
-    WindowManager& windowManager = WindowManager::getInstance();
     Screenshot& screenshot = Screenshot::getInstance();
     Clipboard& clipboard = Clipboard::getInstance();
-    Executor& executor = Executor::getInstance();
-    LogController& logController = LogController::getInstance();
-    Parser parser;
     AutoGuiTester autoGuiTester;
-    QHotkey *hotkey = new QHotkey(QKeySequence("Ctrl+i"), true);
-    QObject::connect(hotkey, &QHotkey::activated, &executor, &Executor::onHotkeyActivated);
 
 
     QQmlApplicationEngine engine;
@@ -73,14 +65,9 @@ int main(int argc, char *argv[])
     engine.rootContext()->setContextProperty("editorModel", &editor_model);
     engine.rootContext()->setContextProperty("menuModel", &menu_model);
     engine.rootContext()->setContextProperty("fileNavigationModel", &file_navigation_model);
-    engine.rootContext()->setContextProperty("WindowManager", &windowManager);
-    engine.rootContext()->setContextProperty("ScreenShot", &screenshot);
-    engine.rootContext()->setContextProperty("Parser", &parser);
-    engine.rootContext()->setContextProperty("Executor", &executor);
-    engine.rootContext()->setContextProperty("Clipboard", &clipboard);
-    engine.rootContext()->setContextProperty("LogController", &logController);
-    engine.rootContext()->setContextProperty("AutoGuiTester", &autoGuiTester);
-
+    engine.rootContext()->setContextProperty("screenShot", &screenshot);
+    engine.rootContext()->setContextProperty("clipboard", &clipboard);
+    engine.rootContext()->setContextProperty("autoGuiTester", &autoGuiTester);
 
     const QUrl url(QStringLiteral("qrc:/src/views/App.qml"));
     QObject::connect(
@@ -93,7 +80,6 @@ int main(int argc, char *argv[])
         },
         Qt::QueuedConnection);
     engine.load(url);
-
 
     return app.exec();
 }

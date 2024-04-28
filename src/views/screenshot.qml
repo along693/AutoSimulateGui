@@ -8,11 +8,13 @@ Window {
 
     property var pixmap: null
     readonly property int borderMargin: 3
-    readonly property color tranparentColor: "transparent"       //透明色
-    readonly property color blurryColor: Qt.rgba(0,0,0,0.3)      //模糊色
-    readonly property color selectBorderColor: "green"           //边框色
+    readonly property color tranparentColor: "transparent"
+    readonly property color blurryColor: Qt.rgba(0,0,0,0.3)
+    readonly property color selectBorderColor: "green"
+    property string _route
+    property var argument
 
-    signal  sigClose()
+    signal  sigClose(string text)
 
     color: tranparentColor
     visibility: ApplicationWindow.FullScreen
@@ -130,7 +132,7 @@ Window {
         }
 
         //LeftTop
-        CusDragRect{
+        DragRect{
             id: dragLeftTop
             anchors{
                 left: resizeBorderItem.left
@@ -150,7 +152,7 @@ Window {
         }
 
         //LeftBottom
-        CusDragRect{
+        DragRect{
             id: dragLeftBottom
             anchors{
                 left: resizeBorderItem.left
@@ -170,7 +172,7 @@ Window {
         }
 
         //RightTop
-        CusDragRect{
+        DragRect{
             id: dragRightTop
             anchors{
                 right: resizeBorderItem.right
@@ -190,7 +192,7 @@ Window {
         }
 
         //RightBottom
-        CusDragRect{
+        DragRect{
             id: dragRightBottom
             anchors{
                 right: resizeBorderItem.right
@@ -210,7 +212,7 @@ Window {
         }
 
         //Top
-        CusDragRect{
+        DragRect{
             id: dragTop
             anchors{
                 top: resizeBorderItem.top
@@ -228,7 +230,7 @@ Window {
         }
 
         //Bottom
-        CusDragRect{
+        DragRect{
             id: dragBottom
             anchors{
                 bottom: resizeBorderItem.bottom
@@ -246,7 +248,7 @@ Window {
         }
 
         //Left
-        CusDragRect{
+        DragRect{
             id: dragLeft
             anchors{
                 left: resizeBorderItem.left
@@ -265,7 +267,7 @@ Window {
         }
 
         //Right
-        CusDragRect{
+        DragRect{
             id: dragRight
             anchors{
                 right: resizeBorderItem.right
@@ -302,7 +304,7 @@ Window {
             }
             text: "退出"
             onClicked: {
-                WindowManager.showApplication();
+                mainController.windowController.showApplication();
                 close();
             }
         }
@@ -315,10 +317,10 @@ Window {
             defaultSuffix: ".png"
             onAccepted: {
                 var filePath = fileDialog.currentFile.toString().substring(8)
-                print(filePath)
-                WindowManager.showApplication();
+                mainController.windowController.showApplication();
+                screenShot.saveCapture(pixmap, filePath);
+                clipboard.setFilePath(filePath);
                 root.close();
-                ScreenShot.saveCapture(pixmap, filePath);
             }
         }
 
@@ -338,7 +340,7 @@ Window {
     }
 
     function captureScreenshot(x, y, width, height) {
-        return ScreenShot.captureArea(x, y, width, height);
+        return screenShot.captureArea(x, y, width, height);
     }
 }
 

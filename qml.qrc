@@ -1,20 +1,21 @@
 <RCC>
     <qresource prefix="/src/views">
         <file alias="main.qml">src/views/main.qml</file>
-        <file alias="editor.qml">src/views/editor.qml</file>
+        <file alias="code_editor.qml">src/views/code_editor.qml</file>
         <file>favicon.ico</file>
-        <file alias="event_edit.qml">src/views/event_edit.qml</file>
+        <file alias="event_editor.qml">src/views/event_editor.qml</file>
         <file alias="screenshot.qml">src/views/screenshot.qml</file>
-        <file alias="CusDragRect.qml">src/views/CusDragRect.qml</file>
+        <file alias="DragRect.qml">src/views/DragRect.qml</file>
         <file alias="help.qml">src/views/help.qml</file>
         <file alias="App.qml">src/views/App.qml</file>
-        <file alias="getCus.qml">src/views/getCus.qml</file>
-        <file alias="test_drag.qml">src/views/test_drag.qml</file>
+        <file alias="mouse_coord_tracker.qml">src/views/mouse_coord_tracker.qml</file>
     </qresource>
     <qresource prefix="/src/styles">
         <file alias="LightTheme.qml">src/styles/LightTheme.qml</file>
         <file alias="qmldir">src/styles/qmldir</file>
         <file alias="DarkTheme.qml">src/styles/DarkTheme.qml</file>
-        <file alias="HighlightText.qml">src/styles/HighlightText.qml</file>
+    </qresource>
+    <qresource prefix="/doc">
+        <file alias="document.pdf">doc/Description_zh.pdf</file>
     </qresource>
 </RCC>

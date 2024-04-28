@@ -1,4 +1,5 @@
 #pragma once
+
 #include <QAbstractListModel>
 #include <QUrl>
 #include <memory>
