@@ -25,6 +25,10 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
             qml.qrc
             D:/qtproj/QHotkey/QHotkey/qhotkey.cpp
             D:/qtproj/QHotkey/QHotkey/qhotkey_win.cpp
+            src/cpp/header/log_model.h
+            src/cpp/src/log_model.cpp
+            src/cpp/header/function_controller.h
+            src/cpp/src/function_controller.cpp
         )
 else()
     if(ANDROID)
@@ -46,7 +50,6 @@ target_link_libraries(AutoSimulateGui
         PRIVATE
         Qt${QT_VERSION_MAJOR}::Core
         Qt${QT_VERSION_MAJOR}::Quick
-        Qt${QT_VERSION_MAJOR}::Widgets
         Qt${QT_VERSION_MAJOR}::Concurrent
         ${OpenCV_LIBS}
 )

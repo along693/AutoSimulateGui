@@ -31,7 +31,7 @@ Item {
                 onClicked: mainController.fileNavigationController.fileOpenedClicked(fileId)
                 background: Rectangle {
                     // color: button.checked ? "#FFB9DDFF" : "transparent"
-                    color: (FluTheme.darkMode === FluThemeType.Light) ? button.checked? LightTheme.color4 : "transparent" : button.checked? "#262c36" : "#1a1b1e"
+                    color: (FluTheme.darkMode === FluThemeType.Light) ? button.checked? LightTheme.buttonCheckedColor : LightTheme.buttonUnCheckedColor : button.checked? DarkTheme.buttonCheckedColor : DarkTheme.buttonUnCheckedColor
                     radius: 10
                 }
             }
@@ -48,7 +48,7 @@ Item {
         }
         width: 120
         height: parent.height
-        color: (FluTheme.darkMode === FluThemeType.Light) ? "#FFFFFF" : "#1a1b1e"
+        color: (FluTheme.darkMode === FluThemeType.Light) ? LightTheme.filenamePanelColor : DarkTheme.filenamePanelColor
         clip: true
         ListView{
             id: listView
@@ -70,16 +70,14 @@ Item {
             topMargin: 4
 
         }
-        color: (FluTheme.darkMode === FluThemeType.Light) ? "#f5f4f1" : "#1c1c10"
+        color: (FluTheme.darkMode === FluThemeType.Light) ? LightTheme.lineNumberPanelColor : DarkTheme.lineNumberPanelColor
 
         LineNumbers {
             id: lineNumbersItem
             anchors.fill: parent
 
-            // selectedBackgroundColr: LightTheme.lineNumberSelectedBackgroundColor
-            selectedBackgroundColor: "#FFB9DDFF"
-            // currentBackgroundColor: LightTheme.lineNumberCurrentBackgroundColor
-            currentBackgroundColor: "#00619a"
+            selectedBackgroundColor: LightTheme.lineNumberSelectedBackgroundColor
+            currentBackgroundColor: LightTheme.lineNumberCurrentBackgroundColor
             selectedTextColor: LightTheme.lineNumberSelectedTextColor
             currentTextColor: LightTheme.lineNumberCurrentTextColor
             textColor: (FluTheme.darkMode === FluThemeType.Light) ? LightTheme.lineNumberTextColor : DarkTheme.lineNumberTextColor
@@ -161,7 +159,6 @@ Item {
                     editorModel.document = textArea.textDocument
                 }
             }
-
             ScrollBar.vertical: FluScrollBar {}
             ScrollBar.horizontal: FluScrollBar {}
         }
@@ -173,7 +170,7 @@ Item {
                 bottom: parent.bottom
                 left: textEditor.right
             }
-            color: (FluTheme.darkMode === FluThemeType.Light) ? "#ffffff" : "#1c1c10"
+            color: (FluTheme.darkMode === FluThemeType.Light) ? LightTheme.rectangleColor : DarkTheme.rectangleColor
 
             width: (parent.width - lineNumberPanel.width - filenamePanel.width) / 5 + 5
             height: parent.height
@@ -216,7 +213,9 @@ Item {
                                 iconSize: 20
                                 normalColor: FluTheme.darkMode === FluThemeType.Light ? LightTheme.color4 : DarkTheme.color4
                                 hoverColor: FluTheme.darkMode === FluThemeType.Light ? LightTheme.color1 : DarkTheme.color1
-                                onClicked:  mainController.menuController.executeClicked(editorModel.text);
+                                onClicked: {
+                                    mainController.menuController.executeClicked(editorModel.text);
+                                }
                             }
                         }
                         Row{
@@ -261,13 +260,14 @@ Item {
                     ListView {
                         id: logView
                         anchors.fill: parent
-                        model: mainController.logController.logs
+                        model: logModel
 
                         delegate: FluText {
-                            text: modelData
+                            text: log
                             width: rightPanel.width
                             wrapMode: Text.WrapAnywhere
                             font: LightTheme.logFont
+                            color: (FluTheme.darkMode === FluThemeType.Light) ? "#037cde" : "#428498"
                         }
                         onCountChanged: {
                             positionViewAtEnd();

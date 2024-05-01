@@ -262,7 +262,6 @@ Window {
                 var point = mapToGlobal(mousePoint);
                 selectionRect.x = Math.min(point.x, selectionRect.endPoint.x);
                 selectionRect.width = Math.max(selectionRect.endPoint.x, point.x)  - selectionRect.x;
-
             }
         }
 
@@ -318,8 +317,8 @@ Window {
             onAccepted: {
                 var filePath = fileDialog.currentFile.toString().substring(8)
                 mainController.windowController.showApplication();
-                screenShot.saveCapture(pixmap, filePath);
-                clipboard.setFilePath(filePath);
+                functionController.screenshot.saveCapture(pixmap, filePath);
+                functionController.clipboard.setFilePath(filePath)
                 root.close();
             }
         }
@@ -340,7 +339,7 @@ Window {
     }
 
     function captureScreenshot(x, y, width, height) {
-        return screenShot.captureArea(x, y, width, height);
+        return functionController.screenshot.captureArea(x, y, width, height);
     }
 }
 

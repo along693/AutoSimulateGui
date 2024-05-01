@@ -3,27 +3,21 @@
 #include <QQmlContext>
 #include <QQuickWindow>
 #include <QDebug>
-#include <QHotkey>
 
 #include "editor_controller.h"
 #include "navigation_controller.h"
 #include "main_controller.h"
 #include "menu_controller.h"
-
+#include "function_controller.h"
 #include "document_handler.h"
 #include "document_model.h"
 #include "navigation_model.h"
-#include "menu_model.h"
 #include "qml_editor_model.h"
-#include "window_controller.h"
+#include "log_model.h"
 #include "screenshot.h"
 #include "autogui_test.h"
-#include "parser.h"
-#include "executor.h"
-#include "log_controller.h"
 #include "clipboard.h"
 #include "line_numbers.h"
-#include "mouse.h"
 
 int main(int argc, char *argv[])
 {
@@ -33,10 +27,6 @@ int main(int argc, char *argv[])
 
     QGuiApplication app(argc, argv);
     app.setWindowIcon(QIcon(":/src/views/favicon.ico"));
-    qmlRegisterType<MainController>("Editor", 1, 0, "MainController");
-    qmlRegisterType<MenuController>("Editor", 1, 0, "MenuController");
-    qmlRegisterType<FileNavigationController>("Editor", 1, 0, "FileNavigationController");
-    qmlRegisterType<DocumentHandler>("Editor", 1, 0, "DocumentHandler");
     qmlRegisterType<LineNumbers>("Editor", 1, 0, "LineNumbers");
 
 
@@ -47,27 +37,29 @@ int main(int argc, char *argv[])
     QmlEditorModel editor_model;
     main_controller.editorController()->setModel(editor_model);
 
-    MenuModel menu_model;
-    main_controller.menuController()->setModel(menu_model);
-
     FileNavigationModel file_navigation_model;
     main_controller.fileNavigationController()->setModel(file_navigation_model);
     main_controller.menuController()->newFileClicked();
+
+    LogModel log_model;
+    main_controller.logController()->setModel(log_model);
 
     Screenshot& screenshot = Screenshot::getInstance();
     Clipboard& clipboard = Clipboard::getInstance();
     AutoGuiTester autoGuiTester;
 
+    FunctionController function_controller;
 
     QQmlApplicationEngine engine;
     engine.rootContext()->setContextProperty("mainController", &main_controller);
     engine.rootContext()->setContextProperty("documentsModel", &documents_model);
     engine.rootContext()->setContextProperty("editorModel", &editor_model);
-    engine.rootContext()->setContextProperty("menuModel", &menu_model);
+    engine.rootContext()->setContextProperty("logModel", &log_model);
     engine.rootContext()->setContextProperty("fileNavigationModel", &file_navigation_model);
     engine.rootContext()->setContextProperty("screenShot", &screenshot);
     engine.rootContext()->setContextProperty("clipboard", &clipboard);
     engine.rootContext()->setContextProperty("autoGuiTester", &autoGuiTester);
+    engine.rootContext()->setContextProperty("functionController", &function_controller);
 
     const QUrl url(QStringLiteral("qrc:/src/views/App.qml"));
     QObject::connect(

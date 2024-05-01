@@ -483,13 +483,14 @@ Item {
                 ListView {
                     id: logView
                     anchors.fill: parent
-                    model: mainController.logController.logs
+                    model: logModel
 
                     delegate: FluText {
-                        text: modelData
+                        text: log
                         width: rightPanel.width
                         wrapMode: Text.WrapAnywhere
                         font: LightTheme.logFont
+                        color: (FluTheme.darkMode === FluThemeType.Light) ? "#037cde" : "#428498"
                     }
                     onCountChanged: {
                         positionViewAtEnd();
