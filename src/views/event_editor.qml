@@ -77,19 +77,39 @@ Item {
             editorModel.document = hiddenText.textDocument
         }
         onTextChanged: {
+            // 将隐藏文本区域的文本按行分割成数组
             var text = hiddenText.text.split("\n");
             var result = [];
+            // 遍历隐藏文本的每一行
             for (var i = 0; i < text.length; i++) {
                 if (text[i].trim() !== "") {
+                    // 创建一个新的数据对象，包含标题和键
                     var newData = {
-                        title: text[i].trim(),
+                        title: text[i].trim(), // 标题为当前行去除空格后的文本
                         key : i
                     };
+                    // 将新数据对象添加到结果数组中
                     result.push(newData);
                 }
             }
+            // 更新树形视图的数据源，以反映最新的数据
             tree_view.updateDataSource(result);
         }
+
+        // onTextChanged: {
+            // var text = hiddenText.text.split("\n");
+            // var result = [];
+            // for (var i = 0; i < text.length; i++) {
+                // if (text[i].trim() !== "") {
+                    // var newData = {
+                        // title: text[i].trim(),
+                        // key : i
+                    // };
+                    // result.push(newData);
+                // }
+            // }
+            // tree_view.updateDataSource(result);
+        // }
     }
 
     function updateHiddenText(text){
@@ -172,6 +192,8 @@ Item {
         if (parameter4.text === '') {
             count += 1;
         }
+        print(count)
+        return count
     }
     FluTreeView{
         id: tree_view
@@ -389,12 +411,13 @@ Item {
                     Row {
                         FluFilledButton {
                             text: qsTr("Append")
+                            width: 60
                             onClicked: {
                                 if (keywordComboBox.currentIndex === -1) {
                                     showWarning("Please select a keyword.")
                                     return
                                 }
-                                if (countEmptyInput() < keywordComboBox.model.get(keywordComboBox.currentIndex).parameterCount) {
+                                if (countEmptyInput() - (4 - keywordComboBox.model.get(keywordComboBox.currentIndex).parameterCount) > 0){
                                     showWarning("Miss Parameter.")
                                     return
                                 }
@@ -411,13 +434,14 @@ Item {
                         }
                         FluFilledButton {
                             text: qsTr("Modify")
+                            width: 60
                             onClicked: {
                                 var currentIndex = tree_view.getCurrentClickedItemIndex();
                                 if (currentIndex === -1) {
                                     showWarning("Do not select a command");
                                     return;
                                 }
-                                if (countEmptyInput() < keywordComboBox.model.get(keywordComboBox.currentIndex).parameterCount) {
+                                if (countEmptyInput() - (4 - keywordComboBox.model.get(keywordComboBox.currentIndex).parameterCount) > 0){
                                     showWarning("Miss Parameter.")
                                     return
                                 }
@@ -484,6 +508,7 @@ Item {
                     id: logView
                     anchors.fill: parent
                     model: logModel
+                    clip: true
 
                     delegate: FluText {
                         text: log

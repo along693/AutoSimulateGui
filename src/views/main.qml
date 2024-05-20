@@ -9,7 +9,7 @@ import Qt.labs.platform
 FluWindow {
     id:window
     visible: true
-    width: 960
+    width: 1060
     height: 640
     minimumWidth: 520
     minimumHeight: 200
@@ -22,6 +22,9 @@ FluWindow {
         buttonFlags: FluContentDialogType.NegativeButton | FluContentDialogType.NeutralButton | FluContentDialogType.PositiveButton
         positiveText: qsTr("Quit")
         neutralText: qsTr("Cancel")
+        onNegativeClicked: {
+            mainController.windowController.hideApplication();
+        }
         onPositiveClicked:{
             FluRouter.exit(0)
         }
@@ -34,12 +37,11 @@ FluWindow {
         closeClickListener: ()=>{dialog_close.open()}
         z:7
     }
+
     function handleDarkChanged() {
-        if(FluTheme.dark){
-            FluTheme.darkMode = FluThemeType.Light
-        }else{
-            FluTheme.darkMode = FluThemeType.Dark
-        }
+        /* 当前是黑夜模式的话就换到白天模式，否则切换到黑夜模式*/
+        FluTheme.darkMode = FluTheme.dark ?
+        FluThemeType.Light : FluThemeType.Dark;
     }
 
     FluObject{

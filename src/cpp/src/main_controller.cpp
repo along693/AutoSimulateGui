@@ -127,7 +127,6 @@ void MainController::handleExecuteClicked(const QString &text) {
     Parser parser;
     Executor& executor = Executor::getInstance();
     executor.startExecutionInBackground(parser.parse(text), 0);
-
 }
 
 void MainController::handleNewFileClicked()

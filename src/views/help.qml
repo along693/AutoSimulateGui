@@ -11,7 +11,7 @@ Item {
 
     PdfDocument {
         id: doc
-        source: "qrc:/doc/document.pdf"
+        source: "qrc:/doc/Description_zh.pdf"
     }
     TreeView {
         id: bookmarksTree
@@ -22,7 +22,7 @@ Item {
             right: pdfView.left
         }
 
-        width: parent.width / 4
+        width: parent.width / 5
         height: parent.height
         clip: true
         delegate: TreeViewDelegate {
@@ -35,6 +35,7 @@ Item {
             document: doc
         }
         ScrollBar.vertical: FluScrollBar { }
+        ScrollBar.horizontal: FluScrollBar {}
     }
 
     PdfMultiPageView {
@@ -46,6 +47,7 @@ Item {
             right: parent.right
         }
         document: doc
+        clip: true
 
         Keys.onPressed: (event)=> {
             if (event.key === Qt.Key_F && event.modifiers & Qt.ControlModifier) {

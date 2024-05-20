@@ -16,6 +16,6 @@
         <file alias="DarkTheme.qml">src/styles/DarkTheme.qml</file>
     </qresource>
     <qresource prefix="/doc">
-        <file alias="document.pdf">doc/Description_zh.pdf</file>
+        <file alias="Description_zh.pdf">doc/Description_zh.pdf</file>
     </qresource>
 </RCC>

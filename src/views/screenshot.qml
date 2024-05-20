@@ -18,10 +18,8 @@ Window {
 
     color: tranparentColor
     visibility: ApplicationWindow.FullScreen
-    flags: Qt.FramelessWindowHint
+    flags: Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint
 
-    //四个阴影区域，笼罩未选择区域
-    //一个选择区域
     Rectangle{
         id: topRect
         anchors{
@@ -131,7 +129,6 @@ Window {
             height: parent.height + borderMargin * 2
         }
 
-        //LeftTop
         DragRect{
             id: dragLeftTop
             anchors{
@@ -151,7 +148,6 @@ Window {
             }
         }
 
-        //LeftBottom
         DragRect{
             id: dragLeftBottom
             anchors{
@@ -171,7 +167,6 @@ Window {
             }
         }
 
-        //RightTop
         DragRect{
             id: dragRightTop
             anchors{
@@ -191,7 +186,6 @@ Window {
             }
         }
 
-        //RightBottom
         DragRect{
             id: dragRightBottom
             anchors{
@@ -211,7 +205,6 @@ Window {
             }
         }
 
-        //Top
         DragRect{
             id: dragTop
             anchors{
@@ -229,7 +222,6 @@ Window {
             }
         }
 
-        //Bottom
         DragRect{
             id: dragBottom
             anchors{
@@ -247,7 +239,6 @@ Window {
             }
         }
 
-        //Left
         DragRect{
             id: dragLeft
             anchors{
@@ -265,7 +256,6 @@ Window {
             }
         }
 
-        //Right
         DragRect{
             id: dragRight
             anchors{
@@ -341,5 +331,6 @@ Window {
     function captureScreenshot(x, y, width, height) {
         return functionController.screenshot.captureArea(x, y, width, height);
     }
+
 }
 

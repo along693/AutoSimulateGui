@@ -26,9 +26,11 @@ Item {
                 checked: index === listView.currentIndex
                 checkable: true
                 anchors.fill: parent
+                // 显示的文本内容为文件的名字加上是否需要保存的标识符
                 text: filename + (fileNeedsSaving ? "*" : "")
-                ButtonGroup.group: openedFileButtonGroup
+                // 当点击文件名的时候触发fileOpenedClick信号，进而判断是否要改变编辑器的文本内容
                 onClicked: mainController.fileNavigationController.fileOpenedClicked(fileId)
+                ButtonGroup.group: openedFileButtonGroup
                 background: Rectangle {
                     // color: button.checked ? "#FFB9DDFF" : "transparent"
                     color: (FluTheme.darkMode === FluThemeType.Light) ? button.checked? LightTheme.buttonCheckedColor : LightTheme.buttonUnCheckedColor : button.checked? DarkTheme.buttonCheckedColor : DarkTheme.buttonUnCheckedColor
@@ -122,9 +124,11 @@ Item {
 
     Shortcut {
         id: saveShortcut
-        sequence: StandardKey.Save
-        onActivated: menuModel.isNewFile ? saveDialog.open() : mainController.menuController.saveFileClicked();
+        sequence: StandardKey.Save // 定义快捷键为Ctrl+s
+        // 当快捷键被触发时执行的操作
+        onActivated: mainController.menuController.saveFileClicked();
     }
+
 
     Shortcut {
         id: newShortcut
@@ -156,6 +160,8 @@ Item {
                 selectionColor: LightTheme.lineNumberSelectedTextColor
                 color: FluTheme.darkMode === FluThemeType.Light ? LightTheme.textColor : DarkTheme.textColor
                 Component.onCompleted: {
+                    //在文本编辑组件初始化的时候，将其和编辑器模型的document变量绑定到一起
+                    //实现了文本编辑的同步
                     editorModel.document = textArea.textDocument
                 }
             }
@@ -226,6 +232,7 @@ Item {
                                 hoverColor: FluTheme.darkMode === FluThemeType.Light ? LightTheme.color1 : DarkTheme.color1
                                 onClicked: {
                                     mainController.windowController.hideApplication()
+                                    // autoGuiTester.runTests();
                                     FluRouter.navigate("/screenshot")
                                 }
                             }
@@ -261,6 +268,7 @@ Item {
                         id: logView
                         anchors.fill: parent
                         model: logModel
+                        clip: true
 
                         delegate: FluText {
                             text: log
